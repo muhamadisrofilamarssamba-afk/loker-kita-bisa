@@ -1,47 +1,88 @@
 /* ==========================================================================
-   KerjaAI Pro - Advanced Interactive & Modern Styling
+   KerjaAI Pro - Tema Nusantara & Kebudayaan Indonesia
    ========================================================================== */
 
-/* 1. CSS Variables / Design Tokens */
+/* 1. Design Tokens & Warna Khas Nusantara */
 :root {
-    --primary-blue: #2563eb;
-    --primary-hover: #1d4ed8;
-    --accent-glow: rgba(37, 99, 235, 0.15);
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(229, 231, 235, 0.8);
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --card-shadow-hover: 0 20px 25px -5px rgba(37, 99, 235, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    /* Palet Warna Adat */
+    --kain-marun: #800020;         /* Merah Marun / Khas Kain Ulos & Songket */
+    --kayu-jati: #4a2c11;          /* Cokelat Kayu Jati / Rumah Adat */
+    --emas-prada: #d4af37;         /* Emas / Ukiran Batik & Perhiasan Adat */
+    --emas-hover: #b89628;
+    --krem-candi: #fdfbf7;         /* Warna Latar Krem Tekstur Batu Candi/Bambu */
+    
+    /* UI Accent & Effects */
+    --primary-blue: #800020;       /* Menggantikan biru utama menjadi Merah Marun */
+    --primary-hover: #5c0017;
+    --accent-glow: rgba(212, 175, 55, 0.25);
+    --glass-bg: rgba(253, 251, 247, 0.92);
+    --glass-border: rgba(212, 175, 55, 0.3);
+    
+    --card-shadow: 0 4px 12px rgba(74, 44, 17, 0.08);
+    --card-shadow-hover: 0 16px 24px -4px rgba(128, 0, 32, 0.15), 0 0 15px rgba(212, 175, 55, 0.2);
 }
 
-/* 2. Global Transitions & Smooth Scrolling */
+/* 2. Global Styling & Latar Belakang Nuansa Nusantara */
 html {
     scroll-behavior: smooth;
 }
 
 body {
+    background-color: var(--krem-candi);
+    color: #2d2621;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
+    /* Pattern Megamendung / Batik Geometris Halus */
+    background-image: radial-gradient(#d4af37 0.65px, transparent 0.65px), radial-gradient(#d4af37 0.65px, var(--krem-candi) 0.65px);
+    background-size: 26px 26px;
+    background-position: 0 0, 13px 13px;
 }
 
-/* 3. Custom Scrollbar Styling */
+/* 3. Custom Scrollbar Bermotif Emas */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 9px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #f4eee0;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: linear-gradient(to bottom, var(--kain-marun), var(--kayu-jati));
     border-radius: 4px;
+    border: 1px solid var(--emas-prada);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: var(--kayu-jati);
 }
 
-/* 4. Modal & Backdrop Mechanics */
+/* 4. Navbar Khas Nusantara */
+nav {
+    background-color: #ffffff !important;
+    border-bottom: 3px solid var(--emas-prada);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 5. Header / Hero Section Motif Songket/Batik */
+header.bg-gradient-to-br {
+    background: linear-gradient(135deg, #4a2c11 0%, #800020 50%, #2b1404 100%) !important;
+    border-bottom: 4px solid var(--emas-prada);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Motif Hiasan Header */
+header.bg-gradient-to-br::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    background-image: radial-gradient(circle, #fff 10%, transparent 11%);
+    background-size: 15px 15px;
+}
+
+/* 6. Modal & Pop-up Efek Ukiran Kayu & Kaca */
 body.modal-open { 
     overflow: hidden; 
 }
@@ -50,15 +91,23 @@ body.modal-open {
     display: none !important; 
 }
 
-/* Modal Entry Animation */
-#apply-modal:not(.hidden-modal) > div {
-    animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+#apply-modal {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(43, 20, 4, 0.6);
 }
 
-@keyframes modalSlideUp {
+/* Animasi Muncul Modal */
+#apply-modal:not(.hidden-modal) > div {
+    animation: nusantaraModalUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    border: 2px solid var(--emas-prada);
+    box-shadow: 0 25px 50px -12px rgba(128, 0, 32, 0.4);
+}
+
+@keyframes nusantaraModalUp {
     from {
         opacity: 0;
-        transform: translateY(20px) scale(0.97);
+        transform: translateY(30px) scale(0.95);
     }
     to {
         opacity: 1;
@@ -66,90 +115,105 @@ body.modal-open {
     }
 }
 
-/* Glassmorphism Backdrop for Modal */
-#apply-modal {
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-}
-
-/* 5. Navigation Tab Styling */
+/* 7. Navigasi Tab (Cari Loker vs HRD) */
 .nav-tab-active {
-    background-color: #eff6ff !important;
-    color: var(--primary-blue) !important;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+    background-color: #fcf6e8 !important;
+    color: var(--kain-marun) !important;
+    border: 1px solid var(--emas-prada) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 6px rgba(128, 0, 32, 0.12);
     position: relative;
 }
 
 .nav-tab-active::after {
     content: '';
     position: absolute;
-    bottom: -2px;
-    left: 10%;
-    width: 80%;
-    height: 2px;
-    background-color: var(--primary-blue);
+    bottom: -3px;
+    left: 15%;
+    width: 70%;
+    height: 3px;
+    background-color: var(--emas-prada);
     border-radius: 2px;
 }
 
 .nav-tab-inactive {
-    color: #4b5563;
+    color: var(--kayu-jati);
 }
 
 .nav-tab-inactive:hover {
-    color: var(--primary-blue);
-    background-color: #f9fafb;
+    color: var(--kain-marun);
+    background-color: #f9f3e6;
 }
 
-/* 6. Card Hover & Interactive Micro-animations */
+/* 8. Kartu Lowongan Pekerjaan (Berkesan Ukiran Kayu & Emas) */
 #job-container > div {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #ffffff;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--glass-border);
+    border-top: 4px solid var(--kain-marun);
 }
 
 #job-container > div:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--card-shadow-hover);
-    border-color: rgba(147, 197, 253, 0.6);
+    border-color: var(--emas-prada);
+    border-top-color: var(--emas-prada);
 }
 
-/* Interactive Buttons */
+/* 9. Tombol Interaktif Bergaya Emas & Marun */
 button {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 button:active {
     transform: scale(0.97);
 }
 
-/* Input Focus Glow Effects */
-input:focus, select:focus, textarea:focus {
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
-    transition: box-shadow 0.2s ease;
+.bg-blue-600 {
+    background-color: var(--kain-marun) !important;
+    border: 1px solid var(--emas-prada) !important;
 }
 
-/* 7. Live Pulse Indicator (For Realtime Status) */
+.bg-blue-600:hover {
+    background-color: var(--primary-hover) !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Badges / Label AI Match Score */
+.bg-blue-50 {
+    background-color: #fdf8eb !important;
+    color: var(--kayu-jati) !important;
+    border-color: #ebd79b !important;
+}
+
+/* Focus Input dengan Kilau Emas */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--emas-prada) !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25) !important;
+}
+
+/* 10. Live Pulse Indicator (Hijau Zamrud Nusantara) */
 .pulse-live {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background-color: #10b981;
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-    animation: pulse 1.6s infinite;
+    background-color: #059669;
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7);
+    animation: pulseNusantara 1.6s infinite;
 }
 
-@keyframes pulse {
+@keyframes pulseNusantara {
     0% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7);
     }
     70% {
         transform: scale(1);
-        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+        box-shadow: 0 0 0 6px rgba(5, 150, 105, 0);
     }
     100% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        box-shadow: 0 0 0 0 rgba(5, 150, 105, 0);
     }
-}
 }
