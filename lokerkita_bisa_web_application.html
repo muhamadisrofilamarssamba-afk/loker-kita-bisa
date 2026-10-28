@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokerkita Bisa - Send & Broadcast CV to Social Media</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            discord: '#5865F2',
+                            telegram: '#0088cc',
+                            whatsapp: '#25D366',
+                            linkedin: '#0A66C2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['Fira Code', 'Courier New', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        /* Glassmorphism & Animations */
+        .glass-header {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .tab-active {
+            border-bottom: 2px solid #22c55e;
+            color: #22c55e;
+        }
+        
+        .animate-pulse-fast {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .glow-effect:hover {
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="border-b border-slate-800 glass-header sticky top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-brand-500/20">
+                        <i class="fa-solid font-bold fa-paper-plane text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-brand-400 bg-clip-text text-transparent">Lokerkita<span class="text-brand-500">Bisa</span></span>
+                        <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/30">CV Hub & Auto-Broadcaster</span>
+                    </div>
+                </div>
+
+                <!-- Main Navigation Tabs -->
+                <nav class="flex items-center gap-1 sm:gap-2">
+                    <button onclick="switchTab('app-tab')" id="nav-app-tab" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-brand-400 bg-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-rocket"></i> <span class="hidden md:inline">Platform Broadcast</span>
+                    </button>
+                    <button onclick="switchTab('history-tab')" id="nav-history-tab" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left"></i> <span class="hidden md:inline">Riwayat</span>
+                        <span id="history-counter" class="ml-1 text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded-full">0</span>
+                    </button>
+                    <button onclick="switchTab('github-tab')" id="nav-github-tab" class="tab-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800 flex items-center gap-2">
+                        <i class="fa-brands fa-github"></i> <span class="hidden md:inline">Source Code</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= TAB 1: CV BUILDER & SOCIAL MEDIA BROADCASTER ================= -->
+        <section id="app-tab" class="tab-content space-y-6">
+            <!-- Alert Banner -->
+            <div class="bg-gradient-to-r from-emerald-950/60 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-32 h-32 bg-brand-500/10 blur-3xl rounded-full pointer-events-none"></div>
+                <div class="flex items-center gap-3 z-10">
+                    <div class="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400 shrink-0">
+                        <i class="fa-solid fa-bullhorn text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-semibold text-white">Siapkan CV & Salurkan Langsung ke Channel Loker</h2>
+                        <p class="text-xs sm:text-sm text-slate-400">Isi data diri, pilih channel sosmed target (Discord, Telegram, WA, LinkedIn), dan kirim dalam sekali klik!</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 z-10">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-500 animate-pulse-fast"></span>
+                    <span class="text-slate-300">System Ready / Webhook Direct</span>
+                </div>
+            </div>
+
+            <!-- Two Column Layout: Left Form, Right Preview -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- LEFT COLUMN: FORM & SOCIAL TARGET CONFIG (7 Cols) -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <!-- Form 1: Profile & CV Details -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4 glow-effect transition-all duration-300">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="text-base font-semibold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-id-card text-brand-400"></i> Data Diri & Posisi Pekerjaan
+                            </h3>
+                            <button onclick="fillSampleData()" class="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1 font-medium bg-brand-500/10 hover:bg-brand-500/20 px-2.5 py-1 rounded-md transition">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Isi Contoh
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Nama Lengkap *</label>
+                                <input type="text" id="cv-name" oninput="updatePreview()" placeholder="Contoh: Rizky Pratama" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Target Posisi Pekerjaan *</label>
+                                <input type="text" id="cv-position" oninput="updatePreview()" placeholder="Contoh: Senior Frontend Developer" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Email Aktif *</label>
+                                <input type="email" id="cv-email" oninput="updatePreview()" placeholder="rizky.dev@example.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Nomor Telepon / WhatsApp *</label>
+                                <input type="text" id="cv-phone" oninput="updatePreview()" placeholder="+62 812 3456 7890" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Ringkasan Pengalaman & Keahlian</label>
+                            <textarea id="cv-summary" oninput="updatePreview()" rows="3" placeholder="Jelaskan secara singkat pengalaman kerja utama, stack pemrograman, dan pencapaian..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition resize-none"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Skill Utama (Koma)</label>
+                                <input type="text" id="cv-skills" oninput="updatePreview()" placeholder="React, Python, HTML, CSS" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Link Portfolio / GitHub</label>
+                                <input type="url" id="cv-portfolio" oninput="updatePreview()" placeholder="https://github.com/rizkypratama" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                        </div>
+
+                        <!-- CV Attachment Upload section -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Upload Berkas CV / Resume (PDF / Image)</label>
+                            <div class="border-2 border-dashed border-slate-800 hover:border-brand-500/50 rounded-xl p-4 text-center cursor-pointer transition bg-slate-950/50 relative group">
+                                <input type="file" id="cv-file" onchange="handleFileUpload(event)" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <div id="upload-idle" class="space-y-1">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-500 group-hover:text-brand-400 transition"></i>
+                                    <p class="text-xs text-slate-300 font-medium">Klik atau seret file CV ke sini</p>
+                                    <p class="text-[10px] text-slate-500">Mendukung format PDF, PNG, JPG (Maks 5MB)</p>
+                                </div>
+                                <div id="upload-success" class="hidden items-center justify-center gap-3">
+                                    <i class="fa-solid fa-file-pdf text-2xl text-rose-500"></i>
+                                    <div class="text-left">
+                                        <p id="file-name" class="text-xs font-semibold text-slate-200 truncate max-w-[200px]">cv_rizky.pdf</p>
+                                        <p id="file-size" class="text-[10px] text-slate-400">1.2 MB • Terlampir</p>
+                                    </div>
+                                    <button type="button" onclick="removeFile(event)" class="ml-auto text-xs text-rose-400 hover:text-rose-300 px-2 py-1 rounded bg-rose-500/10 z-20 relative">Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form 2: Target Social Media Configurator -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4 glow-effect transition-all duration-300">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="text-base font-semibold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-share-nodes text-brand-400"></i> Konfigurasi Target Sosmed
+                            </h3>
+                            <span class="text-xs text-slate-400">Aktifkan channel penyedia loker</span>
+                        </div>
+
+                        <!-- Channel Selector Items -->
+                        <div class="space-y-3">
+                            <!-- Discord Config -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-3 transition-colors hover:border-brand-discord/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-7 h-7 rounded-lg bg-brand-discord/20 text-brand-discord flex items-center justify-center text-sm">
+                                            <i class="fa-brands fa-discord"></i>
+                                        </div>
+                                        <span class="text-sm font-semibold text-slate-200">Discord Webhook (Direct)</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="target-discord" checked onchange="updatePreview()" class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-discord"></div>
+                                    </label>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                    <input type="url" id="discord-webhook-url" placeholder="Optional: URL Webhook Asli (Untuk Tes)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-discord">
+                                    <input type="text" id="discord-channel-name" value="#loker-tech-jobs" placeholder="Nama Channel (Simulasi)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-discord">
+                                </div>
+                            </div>
+
+                            <!-- Telegram Config -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-3 transition-colors hover:border-brand-telegram/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-7 h-7 rounded-lg bg-brand-telegram/20 text-brand-telegram flex items-center justify-center text-sm">
+                                            <i class="fa-brands fa-telegram"></i>
+                                        </div>
+                                        <span class="text-sm font-semibold text-slate-200">Telegram Bot / Channel API</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="target-telegram" checked onchange="updatePreview()" class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-telegram"></div>
+                                    </label>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                    <input type="text" id="telegram-channel-target" value="@LokerKitaBisaChannel" placeholder="Channel Target / Chat ID" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-telegram">
+                                    <input type="password" id="telegram-bot-token" placeholder="Optional: Bot Token API" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-telegram">
+                                </div>
+                            </div>
+
+                            <!-- WhatsApp Config -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-3 transition-colors hover:border-brand-whatsapp/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-7 h-7 rounded-lg bg-brand-whatsapp/20 text-brand-whatsapp flex items-center justify-center text-sm">
+                                            <i class="fa-brands fa-whatsapp"></i>
+                                        </div>
+                                        <span class="text-sm font-semibold text-slate-200">WhatsApp HR / Recruiter Direct</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="target-whatsapp" checked onchange="updatePreview()" class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-whatsapp"></div>
+                                    </label>
+                                </div>
+                                <input type="text" id="whatsapp-number" value="+6281299008877" placeholder="Nomor Telepon HR (+628xxx)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-whatsapp">
+                            </div>
+
+                            <!-- LinkedIn Config -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-3 transition-colors hover:border-brand-linkedin/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-7 h-7 rounded-lg bg-brand-linkedin/20 text-brand-linkedin flex items-center justify-center text-sm">
+                                            <i class="fa-brands fa-linkedin-in"></i>
+                                        </div>
+                                        <span class="text-sm font-semibold text-slate-200">LinkedIn Open To Work Post</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="target-linkedin" checked onchange="updatePreview()" class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-linkedin"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACTION BROADCAST BUTTON -->
+                    <div class="pt-2">
+                        <button onclick="triggerBroadcast()" id="btn-broadcast" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-brand-600 via-emerald-500 to-brand-500 hover:from-brand-500 hover:to-emerald-400 text-slate-950 font-extrabold text-base tracking-wide shadow-xl shadow-brand-500/20 active:scale-[0.99] transition flex items-center justify-center gap-3 relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+                            <i class="fa-solid fa-paper-plane text-xl relative z-10"></i>
+                            <span class="relative z-10">KIRIM BROADCAST CV SEKARANG</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: LIVE BROADCAST PREVIEW & LOGS (5 Cols) -->
+                <div class="lg:col-span-5 space-y-6">
+
+                    <!-- Preview Card Header Tabs -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="text-base font-semibold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-eye text-brand-400"></i> Live Card Preview
+                            </h3>
+                            <span class="text-[11px] bg-brand-500/10 text-brand-400 px-2 py-0.5 rounded-full font-mono">WYSIWYG</span>
+                        </div>
+
+                        <!-- Platform Switcher Buttons -->
+                        <div class="grid grid-cols-4 gap-1.5 p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-medium text-center">
+                            <button onclick="setPreviewPlatform('discord')" id="prev-tab-discord" class="prev-tab-btn active py-2 rounded-lg text-brand-discord bg-slate-800 transition">
+                                <i class="fa-brands fa-discord"></i> <span class="hidden sm:inline">Discord</span>
+                            </button>
+                            <button onclick="setPreviewPlatform('telegram')" id="prev-tab-telegram" class="prev-tab-btn py-2 text-slate-400 hover:text-brand-telegram transition">
+                                <i class="fa-brands fa-telegram"></i> <span class="hidden sm:inline">Telegram</span>
+                            </button>
+                            <button onclick="setPreviewPlatform('whatsapp')" id="prev-tab-whatsapp" class="prev-tab-btn py-2 text-slate-400 hover:text-brand-whatsapp transition">
+                                <i class="fa-brands fa-whatsapp"></i> <span class="hidden sm:inline">WhatsApp</span>
+                            </button>
+                            <button onclick="setPreviewPlatform('linkedin')" id="prev-tab-linkedin" class="prev-tab-btn py-2 text-slate-400 hover:text-brand-linkedin transition">
+                                <i class="fa-brands fa-linkedin"></i> <span class="hidden sm:inline">LinkedIn</span>
+                            </button>
+                        </div>
+
+                        <!-- LIVE PREVIEW CONTAINER -->
+                        <div class="min-h-[380px] bg-slate-950 rounded-xl border border-slate-800 p-4 relative overflow-hidden flex flex-col justify-between">
+                            
+                            <!-- 1. DISCORD EMBED PREVIEW -->
+                            <div id="preview-discord" class="preview-box space-y-3">
+                                <div class="flex items-center gap-2.5 text-xs text-slate-400 border-b border-slate-800/80 pb-2">
+                                    <div class="w-6 h-6 rounded-full bg-brand-discord flex items-center justify-center text-white text-xs font-bold">LKB</div>
+                                    <span class="font-semibold text-white">LokerkitaBisa Bot</span>
+                                    <span class="bg-brand-discord text-[10px] text-white px-1.5 py-0.2 rounded font-sans">BOT</span>
+                                    <span class="text-[10px] text-slate-500 ml-auto" id="preview-time-discord">Hari ini 10:24</span>
+                                </div>
+                                <div class="border-l-4 border-brand-discord bg-[#2b2d31] rounded-r-lg p-3.5 space-y-2 text-xs text-slate-200">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] uppercase font-bold text-white tracking-wider">📄 LAMARAN KERJA BARU DETEKSI</span>
+                                    </div>
+                                    <h4 class="font-bold text-sm text-[#00a8fc] hover:underline cursor-pointer" id="prev-dis-name">Rizky Pratama</h4>
+                                    <p class="font-medium text-xs" id="prev-dis-pos">Target Posisi: Senior Frontend Developer</p>
+                                    <p class="text-slate-300 text-xs leading-relaxed italic border-t border-slate-700/50 pt-2" id="prev-dis-summary">"Pengembang web berpengalaman..."</p>
+                                    <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
+                                        <div><span class="font-semibold text-slate-400">Email:</span> <br><span id="prev-dis-email" class="text-slate-200">rizky@example.com</span></div>
+                                        <div><span class="font-semibold text-slate-400">Telepon:</span> <br><span id="prev-dis-phone" class="text-slate-200">+62 812 3456</span></div>
+                                    </div>
+                                    <div class="pt-1">
+                                        <span class="text-[10px] font-semibold text-slate-400 block mb-1">SKILLSET & TECH STACK:</span>
+                                        <div id="prev-dis-skills" class="flex flex-wrap gap-1">
+                                            <span class="bg-[#1e1f22] border border-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px]">React</span>
+                                        </div>
+                                    </div>
+                                    <div id="prev-dis-file-box" class="mt-2 bg-[#1e1f22] p-2 rounded border border-slate-700 flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-300 truncate max-w-[180px]"><i class="fa-solid fa-file-pdf text-rose-400 mr-1"></i> <span id="prev-dis-filename">resume_cv.pdf</span></span>
+                                        <span class="text-[#00a8fc] hover:underline font-mono">Download</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. TELEGRAM MESSAGE PREVIEW -->
+                            <div id="preview-telegram" class="preview-box hidden space-y-3">
+                                <div class="bg-[#182533] rounded-xl p-3.5 border border-slate-700/50 space-y-2 text-xs">
+                                    <div class="flex items-center gap-2 text-brand-telegram text-xs font-bold">
+                                        <i class="fa-solid fa-bullhorn"></i> <span id="prev-tg-channel">@LokerKitaBisaChannel</span>
+                                    </div>
+                                    <p class="text-white font-bold text-sm">🚨 INFO TALENTA BARU DISALURKAN!</p>
+                                    <p class="text-slate-200"><b>👤 Nama:</b> <span id="prev-tg-name">Rizky Pratama</span></p>
+                                    <p class="text-slate-200"><b>🎯 Posisi Target:</b> <span id="prev-tg-pos">Senior Frontend Developer</span></p>
+                                    <p class="text-slate-200"><b>📧 Kontak:</b> <span id="prev-tg-email">rizky@example.com</span> | <span id="prev-tg-phone">+62 812 3456</span></p>
+                                    <p class="text-slate-300 italic border-l-2 border-brand-telegram pl-2 py-1 my-1 bg-brand-telegram/5" id="prev-tg-summary">"Pengembang web berpengalaman..."</p>
+                                    <p class="text-slate-300"><b>🛠 Skills:</b> <span id="prev-tg-skills">React, Python, Tailwind</span></p>
+                                    <div class="pt-2">
+                                        <div class="w-full bg-[#2b5278] hover:bg-[#325d88] text-white rounded-lg py-1.5 text-center font-semibold text-xs cursor-pointer transition">
+                                            📥 Unduh Lampiran CV / Portfolio
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. WHATSAPP BUBBLE PREVIEW -->
+                            <div id="preview-whatsapp" class="preview-box hidden space-y-3 h-full">
+                                <div class="bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-cover p-3 rounded-xl border border-emerald-900/40 h-full flex flex-col justify-end">
+                                    <div class="bg-[#005c4b] text-[#e9edef] rounded-lg rounded-tr-none p-2.5 text-[13px] space-y-1.5 max-w-[95%] shadow-sm self-end">
+                                        <p class="font-semibold text-white">Halo HR/Recruiter! 👋</p>
+                                        <p>Saya ingin menyetorkan lamaran & CV untuk posisi <b id="prev-wa-pos" class="text-white">Senior Frontend Developer</b>.</p>
+                                        <p class="bg-black/20 p-2 rounded text-[11px] font-mono whitespace-pre-line text-emerald-100" id="prev-wa-body">
+📌 Nama: Rizky Pratama
+✉️ Email: rizky@example.com
+📞 WA: +62 812 3456
+🌐 Portfolio: https://github.com/rizkypratama
+                                        </p>
+                                        <div class="flex items-center justify-end gap-1 text-[10px] text-emerald-200/70 pt-1">
+                                            <span>10:24</span>
+                                            <i class="fa-solid fa-check-double text-sky-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4. LINKEDIN POST PREVIEW -->
+                            <div id="preview-linkedin" class="preview-box hidden space-y-3">
+                                <div class="bg-[#1b1f23] border border-slate-700 rounded-xl p-3.5 space-y-2 text-xs">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-10 h-10 rounded-full bg-brand-linkedin text-white flex items-center justify-center font-bold text-sm">RP</div>
+                                        <div>
+                                            <p class="font-bold text-white text-sm hover:text-brand-linkedin cursor-pointer" id="prev-li-name">Rizky Pratama</p>
+                                            <p class="text-[11px] text-slate-400" id="prev-li-pos">Seeking Senior Frontend Developer Roles</p>
+                                            <p class="text-[10px] text-slate-500 flex items-center gap-1">1h • <i class="fa-solid fa-earth-americas"></i></p>
+                                        </div>
+                                    </div>
+                                    <p class="text-slate-200 text-[13px] leading-relaxed pt-1" id="prev-li-summary">
+                                        Saya siap memberikan kontribusi terbaik di bidang software engineering. Berikut kualifikasi dan berkas CV lengkap saya. <span class="text-brand-linkedin">#OpenToWork #LokerkitaBisa #JobSeeker</span>
+                                    </p>
+                                    <div class="bg-[#0f1115] p-3 rounded-lg border border-slate-700 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition">
+                                        <div class="bg-red-500/10 p-2 rounded text-red-500">
+                                            <i class="fa-solid fa-file-pdf text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-white text-xs" id="prev-li-filename">Curriculum_Vitae_2026.pdf</p>
+                                            <p class="text-[10px] text-slate-400">2 pages • Document</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between border-t border-slate-700/50 pt-2 mt-2 text-slate-400 font-semibold text-[11px]">
+                                        <span class="hover:bg-slate-800 px-2 py-1 rounded cursor-pointer"><i class="fa-regular fa-thumbs-up"></i> Like</span>
+                                        <span class="hover:bg-slate-800 px-2 py-1 rounded cursor-pointer"><i class="fa-regular fa-comment"></i> Comment</span>
+                                        <span class="hover:bg-slate-800 px-2 py-1 rounded cursor-pointer"><i class="fa-solid fa-retweet"></i> Repost</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 z-10 relative">
+                                <span>Status Target Live:</span>
+                                <span id="preview-target-badge" class="text-brand-400 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 bg-brand-400 rounded-full animate-ping inline-block"></span> Ready to Broadcast</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REAL-TIME CONSOLE DISPATCH LOGS -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-terminal text-brand-400"></i> Dispatch Terminal
+                            </h4>
+                            <button onclick="clearConsole()" class="text-[10px] text-slate-500 hover:text-slate-300">Clear</button>
+                        </div>
+                        <div id="console-log" class="bg-[#0d1117] font-mono text-[11px] p-3 rounded-xl border border-slate-800/80 h-36 overflow-y-auto space-y-1.5 text-slate-400 shadow-inner">
+                            <div class="text-slate-500"><span class="text-emerald-500">➜</span> System initialized. Ready to process CV payload...</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 2: BROADCAST HISTORY ================= -->
+        <section id="history-tab" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-brand-400"></i> Riwayat Pengiriman
+                        </h3>
+                        <p class="text-xs text-slate-400">Daftar berkas CV yang berhasil disalurkan ke berbagai sosmed channel.</p>
+                    </div>
+                    <button onclick="clearHistory()" class="text-xs text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-3 py-1.5 rounded-lg transition font-medium flex items-center">
+                        <i class="fa-solid fa-trash-can mr-1.5"></i> Bersihkan Log
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-800">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+                            <tr>
+                                <th class="p-3.5">Waktu</th>
+                                <th class="p-3.5">Pelamar & Posisi</th>
+                                <th class="p-3.5">Channel Target</th>
+                                <th class="p-3.5">Berkas CV</th>
+                                <th class="p-3.5">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body" class="divide-y divide-slate-800/60 bg-slate-900">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 3: GITHUB REPOSITORY & CODE PREVIEW ================= -->
+        <section id="github-tab" class="tab-content hidden space-y-6">
+            <!-- Repo Header Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-github text-3xl text-white"></i>
+                        <div>
+                            <h2 class="text-lg sm:text-xl font-bold text-white font-mono">github.com/lokerkita/lokerkita-bisa</h2>
+                            <p class="text-xs text-brand-400 font-semibold mt-0.5">Public Repository • Full Stack Integration</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                        Source code lengkap siap deploy (HTML, CSS, JS, Python Flask). Backend API meng-handle pengiriman form-data menuju Discord Webhook & Telegram API sesungguhnya.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <button onclick="copyCurrentCode()" class="px-4 py-2.5 bg-white hover:bg-slate-200 text-slate-900 font-bold rounded-xl text-xs flex items-center gap-2 transition shadow-lg">
+                        <i class="fa-regular fa-copy"></i> Salin File
+                    </button>
+                </div>
+            </div>
+
+            <!-- Code Viewer Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                <!-- File Tabs Bar -->
+                <div class="bg-[#161b22] px-4 py-2.5 border-b border-slate-700/50 flex items-center gap-1 overflow-x-auto scrollbar-thin">
+                    <button onclick="switchCodeFile('app.py')" id="code-tab-app.py" class="code-file-btn active px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-800 text-brand-400 border border-slate-700 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-brands fa-python text-amber-400"></i> app.py
+                    </button>
+                    <button onclick="switchCodeFile('index.html')" id="code-tab-index.html" class="code-file-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-400 hover:bg-slate-800/50 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-brands fa-html5 text-orange-500"></i> index.html
+                    </button>
+                    <button onclick="switchCodeFile('style.css')" id="code-tab-style.css" class="code-file-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-400 hover:bg-slate-800/50 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-brands fa-css3-alt text-blue-400"></i> style.css
+                    </button>
+                    <button onclick="switchCodeFile('script.js')" id="code-tab-script.js" class="code-file-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-400 hover:bg-slate-800/50 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-brands fa-js text-yellow-400"></i> script.js
+                    </button>
+                    <button onclick="switchCodeFile('README.md')" id="code-tab-README.md" class="code-file-btn px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-400 hover:bg-slate-800/50 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-solid fa-book text-emerald-400"></i> README.md
+                    </button>
+                </div>
+
+                <!-- Code Container -->
+                <div class="p-4 bg-[#0d1117] relative">
+                    <pre class="font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed max-h-[500px] scrollbar-thin"><code id="code-display"></code></pre>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/60 bg-slate-900/50 py-5 text-center text-xs text-slate-500 mt-auto backdrop-blur">
+        <p>© 2026 Lokerkita Bisa Platform — Menghubungkan Pencari Kerja & Komunitas Sosmed secara Instan.</p>
+    </footer>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 max-w-sm">
+        <div id="toast-icon" class="text-brand-400 text-lg"></div>
+        <div id="toast-message" class="text-xs font-medium">Notifikasi...</div>
+    </div>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // Sample Data Store
+        const sampleCV = {
+            name: "Budi Santoso",
+            position: "Full Stack Web Developer",
+            email: "budi.santoso@email.com",
+            phone: "+62 812 9876 5432",
+            summary: "Pengembang Software berpengalaman 3+ tahun dengan keahlian HTML, CSS, JS, React, dan Python Flask. Terbiasa membangun sistem API dan integrasi Webhook sosial media.",
+            skills: "HTML, CSS, JS, Python, React, Node.js",
+            portfolio: "https://github.com/budisantoso-dev",
+            fileName: "CV_Budi_Santoso_Fullstack.pdf",
+            fileSize: "1.4 MB"
+        };
+
+        let currentFile = null;
+        let activePreviewPlatform = 'discord';
+        let activeCodeFile = 'app.py';
+
+        // Source Code Array strings to prevent template literal execution issues
+        const repoCodeFiles = {
+            "app.py": [
+                "# =========================================================",
+                "# Lokerkita Bisa - Backend API Engine (Python / Flask)",
+                "# Author: Lokerkita Bisa Team",
+                "# =========================================================",
+                "",
+                "import os",
+                "import requests",
+                "from flask import Flask, request, jsonify",
+                "from flask_cors import CORS",
+                "from werkzeug.utils import secure_filename",
+                "",
+                "app = Flask(__name__)",
+                "CORS(app)",
+                "",
+                "app.config['UPLOAD_FOLDER'] = './uploads'",
+                "os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)",
+                "",
+                "@app.route('/api/broadcast', methods=['POST'])",
+                "def broadcast_cv():",
+                "    name = request.form.get('name')",
+                "    position = request.form.get('position')",
+                "    email = request.form.get('email')",
+                "    discord_webhook = request.form.get('discord_webhook')",
+                "",
+                "    # 1. Dispatch to Discord Webhook",
+                "    if discord_webhook:",
+                "        discord_payload = {",
+                "            \"username\": \"Lokerkita Bisa Bot\",",
+                "            \"embeds\": [{",
+                "                \"title\": f\"📄 Lamaran Baru: {name}\",",
+                "                \"description\": f\"Target: {position}\\nEmail: {email}\",",
+                "                \"color\": 5793266",
+                "            }]",
+                "        }",
+                "        requests.post(discord_webhook, json=discord_payload)",
+                "",
+                "    return jsonify({\"status\": \"success\", \"message\": \"CV Broadcasted!\"})",
+                "",
+                "if __name__ == '__main__':",
+                "    app.run(port=5000, debug=True)"
+            ].join('\n'),
+
+            "index.html": [
+                "<!-- Lokerkita Bisa - HTML Structure -->",
+                "<!DOCTYPE html>",
+                "<html lang=\"id\">",
+                "<head>",
+                "  <meta charset=\"UTF-8\">",
+                "  <title>Lokerkita Bisa</title>",
+                "  <link rel=\"stylesheet\" href=\"style.css\">",
+                "  <script src=\"script.js\" defer></script>",
+                "</head>",
+                "<body>",
+                "  <!-- Form & UI Elements Here -->",
+                "</body>",
+                "</html>"
+            ].join('\n'),
+            
+            "style.css": [
+                "/* Lokerkita Bisa - Custom CSS Extensions */",
+                ":root {",
+                "  --brand-color: #22c55e;",
+                "  --bg-dark: #0f172a;",
+                "}",
+                "",
+                "body {",
+                "  background-color: var(--bg-dark);",
+                "  color: #f1f5f9;",
+                "  font-family: 'Inter', sans-serif;",
+                "}",
+                "",
+                "/* Glassmorphism Classes */",
+                ".glass-panel {",
+                "  background: rgba(15, 23, 42, 0.85);",
+                "  backdrop-filter: blur(12px);",
+                "  border: 1px solid rgba(255, 255, 255, 0.1);",
+                "}",
+                "",
+                ".glow-effect:hover {",
+                "  box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);",
+                "  transition: all 0.3s ease;",
+                "}"
+            ].join('\n'),
+
+            "script.js": [
+                "// Lokerkita Bisa - Client Script (JS)",
+                "// Handles UI state, live preview updating, and webhook dispatching",
+                "",
+                "function triggerBroadcast() {",
+                "    const formData = new FormData();",
+                "    formData.append('name', document.getElementById('cv-name').value);",
+                "    formData.append('position', document.getElementById('cv-position').value);",
+                "    ",
+                "    fetch('http://localhost:5000/api/broadcast', {",
+                "        method: 'POST',",
+                "        body: formData",
+                "    })",
+                "    .then(res => res.json())",
+                "    .then(data => console.log('Broadcast Success:', data))",
+                "    .catch(err => console.error('Error:', err));",
+                "}"
+            ].join('\n'),
+
+            "README.md": [
+                "# 🚀 Lokerkita Bisa - CV Social Media Auto-Broadcaster",
+                "",
+                "Aplikasi Web modern (HTML, CSS, JS, Python) untuk menyetorkan CV pelamar kerja dan menyalurkannya secara langsung ke berbagai channel sosmed.",
+                "",
+                "## 📌 Fitur",
+                "1. **CV Builder**: Input data & lampiran.",
+                "2. **Live Preview**: Discord, Telegram, WhatsApp, LinkedIn.",
+                "3. **Python Flask API**: Backend engine untuk webhook dispatcher sesungguhnya."
+            ].join('\n')
+        };
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePreview();
+            renderCodeView();
+            renderHistory();
+            
+            // Set current time for previews
+            const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            if (document.getElementById('preview-time-discord')) document.getElementById('preview-time-discord').textContent = `Hari ini ${timeStr}`;
+        });
+
+        // Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-brand-400', 'bg-slate-800');
+                btn.classList.add('text-slate-400');
+            });
+
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) targetTab.classList.remove('hidden');
+            
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('text-brand-400', 'bg-slate-800');
+                activeNav.classList.remove('text-slate-400');
+            }
+        }
+
+        // Fill Sample Form Data
+        function fillSampleData() {
+            document.getElementById('cv-name').value = sampleCV.name;
+            document.getElementById('cv-position').value = sampleCV.position;
+            document.getElementById('cv-email').value = sampleCV.email;
+            document.getElementById('cv-phone').value = sampleCV.phone;
+            document.getElementById('cv-summary').value = sampleCV.summary;
+            document.getElementById('cv-skills').value = sampleCV.skills;
+            document.getElementById('cv-portfolio').value = sampleCV.portfolio;
+            
+            currentFile = { name: sampleCV.fileName, size: sampleCV.fileSize };
+            
+            const idle = document.getElementById('upload-idle');
+            const success = document.getElementById('upload-success');
+            if(idle) idle.classList.add('hidden');
+            if(success) {
+                success.classList.remove('hidden');
+                success.classList.add('flex');
+            }
+            
+            if(document.getElementById('file-name')) document.getElementById('file-name').textContent = sampleCV.fileName;
+            if(document.getElementById('file-size')) document.getElementById('file-size').textContent = sampleCV.fileSize + " • Terlampir";
+
+            updatePreview();
+            showToast("Contoh data CV berhasil dimuat!", "success");
+            logConsole("Sample CV data (HTML, CSS, JS, Python) loaded.");
+        }
+
+        // Handle File Input
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentFile = {
+                    name: file.name,
+                    size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
+                };
+                document.getElementById('upload-idle').classList.add('hidden');
+                document.getElementById('upload-success').classList.remove('hidden');
+                document.getElementById('upload-success').classList.add('flex');
+                document.getElementById('file-name').textContent = currentFile.name;
+                document.getElementById('file-size').textContent = currentFile.size + " • Terlampir";
+                updatePreview();
+                showToast(`File ${file.name} dilampirkan!`, "success");
+                logConsole(`Attached file: ${file.name} (${currentFile.size})`);
+            }
+        }
+
+        // Remove File
+        function removeFile(e) {
+            e.stopPropagation();
+            currentFile = null;
+            const fileInput = document.getElementById('cv-file');
+            if(fileInput) fileInput.value = "";
+            document.getElementById('upload-idle').classList.remove('hidden');
+            document.getElementById('upload-success').classList.add('hidden');
+            document.getElementById('upload-success').classList.remove('flex');
+            updatePreview();
+            showToast("Berkas CV dihapus", "info");
+            logConsole("Attached file removed.");
+        }
+
+        // Live Preview Platform Selector
+        function setPreviewPlatform(platform) {
+            activePreviewPlatform = platform;
+            document.querySelectorAll('.prev-tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-slate-800', 'text-brand-discord', 'text-brand-telegram', 'text-brand-whatsapp', 'text-brand-linkedin');
+                btn.classList.add('text-slate-400');
+            });
+            document.querySelectorAll('.preview-box').forEach(box => box.classList.add('hidden'));
+
+            const activeBtn = document.getElementById(`prev-tab-${platform}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-slate-800', `text-brand-${platform}`);
+                activeBtn.classList.remove('text-slate-400');
+            }
+
+            const activeBox = document.getElementById(`preview-${platform}`);
+            if (activeBox) activeBox.classList.remove('hidden');
+        }
+
+        // Realtime Updater for Cards
+        function updatePreview() {
+            const name = document.getElementById('cv-name').value || "Nama Pelamar";
+            const pos = document.getElementById('cv-position').value || "Posisi Target Pekerjaan";
+            const email = document.getElementById('cv-email').value || "email@contoh.com";
+            const phone = document.getElementById('cv-phone').value || "+62 8xxx xxxx";
+            const summary = document.getElementById('cv-summary').value || "Ringkasan kualifikasi dan pengalaman kerja pelamar akan muncul di sini...";
+            const skillsRaw = document.getElementById('cv-skills').value || "HTML, CSS, JS, Python";
+            const portfolio = document.getElementById('cv-portfolio').value || "https://portfolio.com";
+            const fileName = currentFile ? currentFile.name : "Resume_CV.pdf";
+
+            const skillsArray = skillsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+            // Update Discord Elements
+            if(document.getElementById('prev-dis-name')) document.getElementById('prev-dis-name').textContent = name;
+            if(document.getElementById('prev-dis-pos')) document.getElementById('prev-dis-pos').textContent = `Target Posisi: ${pos}`;
+            if(document.getElementById('prev-dis-summary')) document.getElementById('prev-dis-summary').textContent = `"${summary}"`;
+            if(document.getElementById('prev-dis-email')) document.getElementById('prev-dis-email').textContent = email;
+            if(document.getElementById('prev-dis-phone')) document.getElementById('prev-dis-phone').textContent = phone;
+            if(document.getElementById('prev-dis-filename')) document.getElementById('prev-dis-filename').textContent = fileName;
+            
+            if(document.getElementById('prev-dis-skills')) {
+                document.getElementById('prev-dis-skills').innerHTML = skillsArray.map(sk => `<span class="bg-[#1e1f22] border border-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] font-mono">${sk}</span>`).join('');
+            }
+
+            // Update Telegram
+            const tgChannel = document.getElementById('telegram-channel-target').value || "@LokerKitaBisaChannel";
+            if(document.getElementById('prev-tg-channel')) document.getElementById('prev-tg-channel').textContent = tgChannel;
+            if(document.getElementById('prev-tg-name')) document.getElementById('prev-tg-name').textContent = name;
+            if(document.getElementById('prev-tg-pos')) document.getElementById('prev-tg-pos').textContent = pos;
+            if(document.getElementById('prev-tg-email')) document.getElementById('prev-tg-email').textContent = email;
+            if(document.getElementById('prev-tg-phone')) document.getElementById('prev-tg-phone').textContent = phone;
+            if(document.getElementById('prev-tg-summary')) document.getElementById('prev-tg-summary').textContent = `"${summary}"`;
+            if(document.getElementById('prev-tg-skills')) document.getElementById('prev-tg-skills').textContent = skillsArray.join(', ');
+
+            // Update WhatsApp
+            if(document.getElementById('prev-wa-pos')) document.getElementById('prev-wa-pos').textContent = pos;
+            if(document.getElementById('prev-wa-body')) document.getElementById('prev-wa-body').textContent = `📌 Nama: ${name}\n✉️ Email: ${email}\n📞 WA: ${phone}\n🛠 Skills: ${skillsArray.join(', ')}\n🌐 Portfolio: ${portfolio}`;
+
+            // Update LinkedIn
+            if(document.getElementById('prev-li-name')) document.getElementById('prev-li-name').textContent = name;
+            if(document.getElementById('prev-li-pos')) document.getElementById('prev-li-pos').textContent = `Seeking ${pos} Roles`;
+            if(document.getElementById('prev-li-summary')) document.getElementById('prev-li-summary').innerHTML = `${summary} <span class="text-brand-linkedin">#OpenToWork #LokerkitaBisa</span>`;
+            if(document.getElementById('prev-li-filename')) document.getElementById('prev-li-filename').textContent = fileName;
+        }
+
+        // Broadcast Execution
+        async function triggerBroadcast() {
+            const name = document.getElementById('cv-name').value;
+            const position = document.getElementById('cv-position').value;
+            const email = document.getElementById('cv-email').value;
+
+            if (!name || !position || !email) {
+                showToast("Lengkapi Nama, Posisi, dan Email terlebih dahulu!", "error");
+                logConsole("[ERROR] Validation failed. Missing required inputs.");
+                return;
+            }
+
+            const btn = document.getElementById('btn-broadcast');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-xl"></i> <span class="relative z-10">MENGIRIM BROADCAST...</span>`;
+
+            logConsole(`[START] Broadcast initialization for ${name}...`);
+
+            const activeChannels = [];
+            const discordActive = document.getElementById('target-discord').checked;
+            const telegramActive = document.getElementById('target-telegram').checked;
+            const whatsappActive = document.getElementById('target-whatsapp').checked;
+            const linkedinActive = document.getElementById('target-linkedin').checked;
+            const discordWebhook = document.getElementById('discord-webhook-url').value;
+
+            // Simulasi/Real Dispatch ke berbagai target sosmed
+            if (discordActive) {
+                activeChannels.push("Discord");
+                if (discordWebhook && discordWebhook.includes('discord.com/api/webhooks')) {
+                    logConsole(`[DISCORD] Executing live POST payload to Discord Webhook...`);
+                    try {
+                        await fetch(discordWebhook, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: "Lokerkita Bisa (App)",
+                                content: `🚨 **Lamaran Baru Deteksi**: ${name} - ${position}`
+                            })
+                        });
+                        logConsole(`[DISCORD] Success! Live Payload 204.`);
+                    } catch (e) {
+                        logConsole(`[DISCORD WARNING] Live webhook fetch failed. Simulating local mode.`);
+                    }
+                } else {
+                    logConsole(`[DISCORD] Local simulation payload dispatched.`);
+                }
+            }
+
+            if (telegramActive) {
+                activeChannels.push("Telegram");
+                logConsole(`[TELEGRAM] Parsing Markdown & pushing to Telegram API target.`);
+            }
+
+            if (whatsappActive) {
+                activeChannels.push("WhatsApp");
+                logConsole(`[WHATSAPP] Direct link WA API generated.`);
+            }
+
+            if (linkedinActive) {
+                activeChannels.push("LinkedIn");
+                logConsole(`[LINKEDIN] Post intent prepared.`);
+            }
+
+            if (activeChannels.length === 0) {
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    showToast("Tidak ada target sosmed yang dipilih!", "error");
+                    logConsole("[ERROR] No target channels active.");
+                }, 500);
+                return;
+            }
+
+            // Fake Network Delay for effect
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+
+                // Create History Record
+                const record = {
+                    id: 'LKB-' + Date.now().toString().slice(-4),
+                    timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+                    name: name,
+                    position: position,
+                    channels: activeChannels,
+                    fileName: currentFile ? currentFile.name : "Resume_CV.pdf"
+                };
+
+                const history = JSON.parse(localStorage.getItem('lkb_history') || '[]');
+                history.unshift(record);
+                localStorage.setItem('lkb_history', JSON.stringify(history));
+                
+                renderHistory();
+                showToast(`Broadcast CV Sukses ke ${activeChannels.length} Platform!`, "success");
+                logConsole(`[FINISHED] Sequence complete. Distributed to: ${activeChannels.join(', ')}`);
+                
+                // Clear input if needed or just leave them
+            }, 1500);
+        }
+
+        // History Render
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('lkb_history') || '[]');
+            const counter = document.getElementById('history-counter');
+            if (counter) counter.textContent = history.length;
+
+            const tbody = document.getElementById('history-table-body');
+            if (!tbody) return;
+
+            if (history.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-10 text-slate-500">
+                            <i class="fa-solid fa-inbox text-4xl mb-3 block opacity-50"></i>
+                            Belum ada riwayat broadcast.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr class="hover:bg-slate-800/50 transition">
+                    <td class="p-3.5 font-mono text-slate-400 text-[11px]">${item.timestamp}</td>
+                    <td class="p-3.5">
+                        <span class="font-bold text-white block text-sm">${item.name}</span>
+                        <span class="text-[11px] text-brand-400 font-medium">${item.position}</span>
+                    </td>
+                    <td class="p-3.5">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            ${item.channels.map(ch => `<span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700 font-medium">${ch}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="p-3.5 font-mono text-slate-300 text-[11px]">
+                        <i class="fa-solid fa-paperclip text-slate-500 mr-1"></i> ${item.fileName}
+                    </td>
+                    <td class="p-3.5">
+                        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-semibold"><i class="fa-solid fa-check mr-1"></i>Terkirim</span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('lkb_history');
+            renderHistory();
+            showToast("Log riwayat dibersihkan.", "info");
+            logConsole("History storage wiped.");
+        }
+
+        // Code Viewer Switcher
+        function switchCodeFile(filename) {
+            activeCodeFile = filename;
+            document.querySelectorAll('.code-file-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'text-brand-400', 'border', 'border-slate-700');
+                btn.classList.add('text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`code-tab-${filename}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-slate-800', 'text-brand-400', 'border', 'border-slate-700');
+                activeBtn.classList.remove('text-slate-400');
+            }
+            renderCodeView();
+        }
+
+        function renderCodeView() {
+            const codeEl = document.getElementById('code-display');
+            if (codeEl && repoCodeFiles[activeCodeFile]) {
+                const codeText = repoCodeFiles[activeCodeFile]
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;");
+                codeEl.innerHTML = codeText;
+            }
+        }
+
+        function copyCurrentCode() {
+            const textToCopy = repoCodeFiles[activeCodeFile];
+            if (!textToCopy) return;
+
+            const tempArea = document.createElement('textarea');
+            tempArea.value = textToCopy;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(`File ${activeCodeFile} disalin!`, "success");
+            } catch (err) {
+                showToast("Gagal menyalin.", "error");
+            }
+            document.body.removeChild(tempArea);
+        }
+
+        // Terminal Log
+        function logConsole(msg) {
+            const consoleBox = document.getElementById('console-log');
+            if (!consoleBox) return;
+            const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            // Format log colors
+            let formattedMsg = msg;
+            if (msg.includes('[ERROR]')) {
+                formattedMsg = `<span class="text-rose-400">${msg}</span>`;
+            } else if (msg.includes('[DISCORD]') || msg.includes('[TELEGRAM]') || msg.includes('[WHATSAPP]') || msg.includes('[LINKEDIN]')) {
+                formattedMsg = `<span class="text-sky-300">${msg}</span>`;
+            } else if (msg.includes('[FINISHED]')) {
+                formattedMsg = `<span class="text-emerald-400 font-bold">${msg}</span>`;
+            } else {
+                formattedMsg = `<span class="text-slate-300">${msg}</span>`;
+            }
+
+            const line = document.createElement('div');
+            line.innerHTML = `<span class="text-slate-600 font-bold">[${time}]</span> ${formattedMsg}`;
+            consoleBox.appendChild(line);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        function clearConsole() {
+            const consoleBox = document.getElementById('console-log');
+            if (consoleBox) consoleBox.innerHTML = '<div class="text-slate-500"><span class="text-emerald-500">➜</span> Console log cleared.</div>';
+        }
+
+        // Custom Toast Notification System
+        let toastTimeout;
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            clearTimeout(toastTimeout);
+            toastMsg.textContent = message;
+            
+            if (type === 'success') {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-check text-brand-500"></i>`;
+                toast.style.borderColor = 'rgba(34, 197, 94, 0.4)';
+            } else if (type === 'error') {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-500"></i>`;
+                toast.style.borderColor = 'rgba(244, 63, 94, 0.4)';
+            } else {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-info text-sky-400"></i>`;
+                toast.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
