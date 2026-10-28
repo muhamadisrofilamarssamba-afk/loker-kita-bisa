@@ -12,13 +12,13 @@
     <!-- Custom CSS Nusantara -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Firebase SDK (Compat Mode) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col selection:bg-red-800 selection:text-amber-200">
 
-    <!-- Navbar dengan Branding SMABAJA -->
+    <!-- Navbar SMABAJA -->
     <nav class="bg-white shadow-sm fixed w-full z-20 top-0 border-b-2 border-amber-600">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -43,10 +43,10 @@
         </div>
     </nav>
 
-    <!-- Content Area -->
+    <!-- Main Content -->
     <main class="pt-16 flex-grow">
         
-        <!-- SECTION 1: PENCARI KERJA -->
+        <!-- SECTION 1: HALAMAN PENCARI KERJA -->
         <div id="tab-jobs" class="block">
             <!-- HERO BANNER -->
             <header class="py-12 bg-gradient-to-br from-red-950 via-red-900 to-amber-950 text-white text-center relative overflow-hidden">
@@ -57,7 +57,7 @@
                     <h1 class="text-3xl md:text-5xl font-extrabold mb-3 tracking-tight">SMA BARENG KERJA (SMABAJA)</h1>
                     <p class="text-base md:text-lg text-amber-100/90 mb-8 max-w-2xl mx-auto">Temukan lowongan kerja impian khusus lulusan SMA. Hubungkan diri Anda langsung ke WhatsApp HRD secara konsisten dan terpercaya.</p>
                     
-                    <!-- Search & Filter Bar -->
+                    <!-- Search & Filter -->
                     <div class="bg-white p-3 rounded-xl shadow-lg text-gray-800 flex flex-col md:flex-row gap-3">
                         <div class="flex-grow flex items-center px-3 bg-gray-50 rounded-lg border border-gray-200">
                             <i class="fa-solid fa-search text-gray-400 mr-2"></i>
@@ -86,7 +86,7 @@
                         <p class="text-sm text-gray-500">Peluang kerja terbaik untuk lulusan dan siswa SMA.</p>
                     </div>
                     <div id="job-count-badge" class="bg-amber-50 text-red-900 font-semibold px-3 py-1 rounded-full text-xs border border-amber-300">
-                        Memuat data...
+                        Memuat data realtime...
                     </div>
                 </div>
 
