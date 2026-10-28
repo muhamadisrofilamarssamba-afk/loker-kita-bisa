@@ -1,6 +1,47 @@
-/* Style Tambahan Kustom */
+/* ==========================================================================
+   KerjaAI Pro - Advanced Interactive & Modern Styling
+   ========================================================================== */
 
-/* State Tampilan Modal */
+/* 1. CSS Variables / Design Tokens */
+:root {
+    --primary-blue: #2563eb;
+    --primary-hover: #1d4ed8;
+    --accent-glow: rgba(37, 99, 235, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(229, 231, 235, 0.8);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --card-shadow-hover: 0 20px 25px -5px rgba(37, 99, 235, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* 2. Global Transitions & Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+}
+
+/* 3. Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* 4. Modal & Backdrop Mechanics */
 body.modal-open { 
     overflow: hidden; 
 }
@@ -9,11 +50,45 @@ body.modal-open {
     display: none !important; 
 }
 
-/* Tab Navigation Styling Active / Inactive */
+/* Modal Entry Animation */
+#apply-modal:not(.hidden-modal) > div {
+    animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Glassmorphism Backdrop for Modal */
+#apply-modal {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* 5. Navigation Tab Styling */
 .nav-tab-active {
-    background-color: #ebf5ff;
-    color: #1c64f2;
-    border-bottom: 2px solid #1c64f2;
+    background-color: #eff6ff !important;
+    color: var(--primary-blue) !important;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+    position: relative;
+}
+
+.nav-tab-active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background-color: var(--primary-blue);
+    border-radius: 2px;
 }
 
 .nav-tab-inactive {
@@ -21,6 +96,60 @@ body.modal-open {
 }
 
 .nav-tab-inactive:hover {
-    color: #1c64f2;
+    color: var(--primary-blue);
     background-color: #f9fafb;
+}
+
+/* 6. Card Hover & Interactive Micro-animations */
+#job-container > div {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--glass-border);
+}
+
+#job-container > div:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: rgba(147, 197, 253, 0.6);
+}
+
+/* Interactive Buttons */
+button {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* Input Focus Glow Effects */
+input:focus, select:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+    transition: box-shadow 0.2s ease;
+}
+
+/* 7. Live Pulse Indicator (For Realtime Status) */
+.pulse-live {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
 }
