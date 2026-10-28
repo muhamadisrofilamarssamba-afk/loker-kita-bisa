@@ -306,4 +306,3 @@ function switchTab(tabName) {
         btnHrd.className = "nav-tab-active font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
     }
 }
-}
