@@ -1,90 +1,97 @@
-// Data Awal Bawaan (Default Sample Jobs)
-const DEFAULT_JOBS = [
-    {
-        id: 1,
-        title: "Frontend Developer",
-        company: "PT Maju Terus Digital",
-        location: "Jakarta Selatan",
-        type: "Full-time",
-        salary: "Rp 6.000.000 - 8.000.000",
-        skills: ["HTML", "CSS", "JavaScript", "React", "Tailwind"],
-        hrdWa: "6281234567890",
-        date: "2026-03-25"
-    },
-    {
-        id: 2,
-        title: "Social Media Admin",
-        company: "Kopi Senja Nusantara",
-        location: "Bandung",
-        type: "Part-time",
-        salary: "Rp 3.500.000 - 4.500.000",
-        skills: ["Instagram", "TikTok", "Canva", "Copywriting"],
-        hrdWa: "6289876543210",
-        date: "2026-03-26"
-    },
-    {
-        id: 3,
-        title: "Desainer Grafis / UI",
-        company: "StartupKreatif",
-        location: "Remote",
-        type: "Freelance",
-        salary: "Rp 4.000.000 - 7.000.000",
-        skills: ["Figma", "UI/UX", "Illustrator", "Photoshop"],
-        hrdWa: "628111222333",
-        date: "2026-03-27"
-    }
-];
+// 1. KONFIGURASI FIREBASE (Terhubung ke database milikmu)
+const firebaseConfig = {
+    databaseURL: "https://lokerkerja-f6a20-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "lokerkerja-f6a20",
+    authDomain: "lokerkerja-f6a20.firebaseapp.com",
+    storageBucket: "lokerkerja-f6a20.appspot.com"
+};
+
+// Inisialisasi Firebase App & Realtime Database
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
 let jobsData = [];
 let selectedJobForApply = null;
 
-// Initialization Aplikasi
+// 2. REALTIME LISTENER (Sync Data Otomatis Tanpa Refresh Halaman)
 document.addEventListener("DOMContentLoaded", () => {
-    loadJobsFromStorage();
-    renderJobFeed(jobsData);
-    renderHRDList();
+    db.ref('jobs').on('value', (snapshot) => {
+        const data = snapshot.val();
+        jobsData = [];
+
+        if (data) {
+            Object.keys(data).forEach((key) => {
+                jobsData.unshift({
+                    id: key, // Menggunakan ID unik dari Firebase
+                    ...data[key]
+                });
+            });
+        }
+
+        renderJobFeed(jobsData);
+        renderHRDList();
+    });
 });
 
-// Load Data dari LocalStorage
-function loadJobsFromStorage() {
-    const savedJobs = localStorage.getItem("kerjaai_jobs_data");
-    if (savedJobs) {
-        jobsData = JSON.parse(savedJobs);
-    } else {
-        jobsData = [...DEFAULT_JOBS];
-        saveJobsToStorage();
+// 3. TAMBAH LOKER BARU KE FIREBASE (Fungsi HRD)
+function handlePostJob(event) {
+    event.preventDefault();
+
+    const submitBtn = document.getElementById("submit-btn");
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Mempublikasikan...";
+
+    const title = document.getElementById("post-title").value.trim();
+    const company = document.getElementById("post-company").value.trim();
+    const location = document.getElementById("post-location").value.trim();
+    const type = document.getElementById("post-type").value;
+    const salary = document.getElementById("post-salary").value.trim();
+    let wa = document.getElementById("post-wa").value.trim();
+    const skillsRaw = document.getElementById("post-skills").value;
+
+    // Sanitasi Format WhatsApp (mengubah 08xx menjadi 628xx)
+    wa = wa.replace(/[^0-9]/g, '');
+    if (wa.startsWith("0")) {
+        wa = "62" + wa.slice(1);
+    }
+
+    const skillsArr = skillsRaw.split(",").map(s => s.trim()).filter(s => s.length > 0);
+
+    const newJob = {
+        title: title,
+        company: company,
+        location: location,
+        type: type,
+        salary: salary,
+        skills: skillsArr,
+        hrdWa: wa,
+        date: new Date().toISOString().split('T')[0]
+    };
+
+    // Push data ke Node 'jobs' di Firebase
+    db.ref('jobs').push(newJob, (error) => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan`;
+
+        if (error) {
+            alert("Gagal mempublikasikan lowongan: " + error.message);
+        } else {
+            alert("Berhasil! Lowongan dipublikasikan secara realtime ke Firebase.");
+            document.getElementById("hrd-post-form").reset();
+        }
+    });
+}
+
+// 4. HAPUS LOKER REALTIME (Fungsi HRD)
+function deleteJob(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus lowongan ini dari database?")) {
+        db.ref('jobs/' + id).remove()
+            .then(() => alert("Lowongan berhasil dihapus dari Firebase."))
+            .catch(err => alert("Gagal menghapus: " + err.message));
     }
 }
 
-// Simpan Data ke LocalStorage
-function saveJobsToStorage() {
-    localStorage.setItem("kerjaai_jobs_data", JSON.stringify(jobsData));
-}
-
-// Fitur Navigasi Tab (Pencari Kerja vs Dashboard HRD)
-function switchTab(tabName) {
-    const tabJobs = document.getElementById("tab-jobs");
-    const tabHrd = document.getElementById("tab-hrd");
-    const btnJobs = document.getElementById("nav-btn-jobs");
-    const btnHrd = document.getElementById("nav-btn-hrd");
-
-    if (tabName === "jobs") {
-        tabJobs.classList.remove("hidden");
-        tabHrd.classList.add("hidden");
-        
-        btnJobs.className = "nav-tab-active font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
-        btnHrd.className = "nav-tab-inactive font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
-    } else {
-        tabJobs.classList.add("hidden");
-        tabHrd.classList.remove("hidden");
-        
-        btnJobs.className = "nav-tab-inactive font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
-        btnHrd.className = "nav-tab-active font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
-        renderHRDList();
-    }
-}
-
-// Render Daftar Lowongan di Halaman Utama Pencari Kerja
+// 5. RENDER DAFTAR LOKER DI HALAMAN PENCARI KERJA
 function renderJobFeed(dataToRender) {
     const container = document.getElementById("job-container");
     const emptyState = document.getElementById("empty-state");
@@ -127,7 +134,7 @@ function renderJobFeed(dataToRender) {
                     </div>
                 </div>
 
-                <button onclick="openApplyModal(${job.id})" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-sm transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                <button onclick="openApplyModal('${job.id}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-sm transition duration-300 shadow-sm flex items-center justify-center gap-2">
                     <i class="fa-solid fa-paper-plane"></i> Lamar Sekarang
                 </button>
             </div>
@@ -136,7 +143,37 @@ function renderJobFeed(dataToRender) {
     });
 }
 
-// Filter Pencarian Pekerjaan Live
+// 6. RENDER DAFTAR LOKER MANAJEMEN HRD
+function renderHRDList() {
+    const container = document.getElementById("hrd-job-list");
+    const countLabel = document.getElementById("hrd-job-count");
+
+    container.innerHTML = "";
+    countLabel.innerText = `${jobsData.length} Total Loker Aktif`;
+
+    if (jobsData.length === 0) {
+        container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">Belum ada lowongan terdaftar di Firebase.</p>`;
+        return;
+    }
+
+    jobsData.forEach((job) => {
+        const itemHTML = `
+            <div class="p-4 rounded-lg border border-gray-200 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm">${job.title}</h4>
+                    <p class="text-xs text-gray-600">${job.company} • ${job.location} (${job.type})</p>
+                    <p class="text-[11px] text-gray-400 mt-1">WA: +${job.hrdWa}</p>
+                </div>
+                <button onclick="deleteJob('${job.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold px-3 py-1.5 rounded text-xs border border-red-200 transition">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Hapus
+                </button>
+            </div>
+        `;
+        container.innerHTML += itemHTML;
+    });
+}
+
+// 7. FILTER PENCARIAN LIVE
 function filterJobs() {
     const keyword = document.getElementById("search-keyword").value.toLowerCase();
     const type = document.getElementById("filter-type").value;
@@ -153,100 +190,7 @@ function filterJobs() {
     renderJobFeed(filtered);
 }
 
-// Fitur Tambah Lowongan oleh HRD (Form Handler)
-function handlePostJob(event) {
-    event.preventDefault();
-
-    const title = document.getElementById("post-title").value.trim();
-    const company = document.getElementById("post-company").value.trim();
-    const location = document.getElementById("post-location").value.trim();
-    const type = document.getElementById("post-type").value;
-    const salary = document.getElementById("post-salary").value.trim();
-    let wa = document.getElementById("post-wa").value.trim();
-    const skillsRaw = document.getElementById("post-skills").value;
-
-    // Format sanitize WA
-    wa = wa.replace(/[^0-9]/g, '');
-    if (wa.startsWith("0")) {
-        wa = "62" + wa.slice(1);
-    }
-
-    const skillsArr = skillsRaw.split(",").map(s => s.trim()).filter(s => s.length > 0);
-
-    const newJob = {
-        id: Date.now(),
-        title: title,
-        company: company,
-        location: location,
-        type: type,
-        salary: salary,
-        skills: skillsArr,
-        hrdWa: wa,
-        date: new Date().toISOString().split('T')[0]
-    };
-
-    jobsData.unshift(newJob);
-    saveJobsToStorage();
-
-    // Reset Form
-    document.getElementById("hrd-post-form").reset();
-    
-    alert("Berhasil! Lowongan baru telah dipublikasikan secara nyata.");
-    renderHRDList();
-    renderJobFeed(jobsData);
-}
-
-// Render Daftar Loker Manajemen HRD
-function renderHRDList() {
-    const container = document.getElementById("hrd-job-list");
-    const countLabel = document.getElementById("hrd-job-count");
-
-    container.innerHTML = "";
-    countLabel.innerText = `${jobsData.length} Total Loker Aktif`;
-
-    if (jobsData.length === 0) {
-        container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">Belum ada lowongan terdaftar.</p>`;
-        return;
-    }
-
-    jobsData.forEach((job) => {
-        const itemHTML = `
-            <div class="p-4 rounded-lg border border-gray-200 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div>
-                    <h4 class="font-bold text-gray-800 text-sm">${job.title}</h4>
-                    <p class="text-xs text-gray-600">${job.company} • ${job.location} (${job.type})</p>
-                    <p class="text-[11px] text-gray-400 mt-1">WA: +${job.hrdWa}</p>
-                </div>
-                <button onclick="deleteJob(${job.id})" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold px-3 py-1.5 rounded text-xs border border-red-200 transition">
-                    <i class="fa-solid fa-trash-can mr-1"></i> Hapus
-                </button>
-            </div>
-        `;
-        container.innerHTML += itemHTML;
-    });
-}
-
-// Fitur Hapus Loker oleh HRD
-function deleteJob(id) {
-    if (confirm("Apakah Anda yakin ingin menghapus lowongan kerja ini?")) {
-        jobsData = jobsData.filter(j => j.id !== id);
-        saveJobsToStorage();
-        renderHRDList();
-        renderJobFeed(jobsData);
-    }
-}
-
-// Reset Data Bawaan
-function resetDefaultJobs() {
-    if (confirm("Kembalikan data ke kondisi awal (Sample Data)? Data buatan kamu akan hilang.")) {
-        jobsData = [...DEFAULT_JOBS];
-        saveJobsToStorage();
-        renderHRDList();
-        renderJobFeed(jobsData);
-    }
-}
-
-// Logika Modal Apply Pekerjaan
+// 8. LOGIKA MODAL LAMARAN & AI SCORE
 function openApplyModal(jobId) {
     selectedJobForApply = jobsData.find(j => j.id === jobId);
     if (!selectedJobForApply) return;
@@ -269,18 +213,16 @@ function closeModal() {
     selectedJobForApply = null;
 }
 
-// Algoritma AI Match Score (Client-side overlapping calculation)
 function calculateRealtimeMatch() {
     if (!selectedJobForApply) return;
 
     const userSkillsInput = document.getElementById("applicant-skills").value.toLowerCase();
     const userSkillsArr = userSkillsInput.split(",").map(s => s.trim()).filter(s => s.length > 0);
-
     const requiredSkills = selectedJobForApply.skills.map(s => s.toLowerCase());
 
     if (userSkillsArr.length === 0 || requiredSkills.length === 0) {
         document.getElementById("modal-ai-score-val").innerText = "0%";
-        document.getElementById("modal-ai-score-label").innerText = "Masukkan skill Anda di atas";
+        document.getElementById("modal-ai-score-label").innerText = "Ketik skill Anda di atas";
         return;
     }
 
@@ -311,7 +253,7 @@ function calculateRealtimeMatch() {
     }
 }
 
-// Kirim Form ke WhatsApp HRD Direct
+// 9. SUBMIT LAMARAN KE WHATSAPP HRD
 function submitApplication(event) {
     event.preventDefault();
 
@@ -323,14 +265,31 @@ function submitApplication(event) {
     const message = document.getElementById("applicant-message").value.trim();
     const aiScore = document.getElementById("modal-ai-score-val").innerText;
 
-    // Teks Terstruktur untuk Pesan WhatsApp
-    const textMsg = `Halo HRD *${selectedJobForApply.company}*,%0A%0APerkenalkan saya *${name}*. Saya melamar posisi *${selectedJobForApply.title}* via platform KerjaAI.%0A%0A📊 *AI Match Score Profile:* ${aiScore}%0A💪 *Keahlian/Skill:* ${skills}%0A📄 *Tautan CV/Portofolio:* ${cvLink}%0A%0A💬 *Catatan Pelamar:*%0A"${message}"%0A%0AMohon arahannya untuk proses seleksi selanjutnya. Terima kasih!`;
+    const textMsg = `Halo HRD *${selectedJobForApply.company}*,%0A%0APerkenalkan saya *${name}*. Saya melamar posisi *${selectedJobForApply.title}* via KerjaAI.%0A%0A📊 *AI Match Score Profile:* ${aiScore}%0A💪 *Keahlian/Skill:* ${skills}%0A📄 *Tautan CV/Portofolio:* ${cvLink}%0A%0A💬 *Catatan Pelamar:*%0A"${message}"%0A%0AMohon arahannya. Terima kasih!`;
 
     const waUrl = `https://wa.me/${selectedJobForApply.hrdWa}?text=${textMsg}`;
-
-    // Open WhatsApp
     window.open(waUrl, "_blank");
 
     closeModal();
-    alert("Lamaran berhasil diproses! Anda dialihkan ke WhatsApp HRD.");
+    alert("Lamaran diproses! Dialihkan ke WhatsApp HRD.");
+}
+
+// 10. NAVIGASI TAB
+function switchTab(tabName) {
+    const tabJobs = document.getElementById("tab-jobs");
+    const tabHrd = document.getElementById("tab-hrd");
+    const btnJobs = document.getElementById("nav-btn-jobs");
+    const btnHrd = document.getElementById("nav-btn-hrd");
+
+    if (tabName === "jobs") {
+        tabJobs.classList.remove("hidden");
+        tabHrd.classList.add("hidden");
+        btnJobs.className = "nav-tab-active font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
+        btnHrd.className = "nav-tab-inactive font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
+    } else {
+        tabJobs.classList.add("hidden");
+        tabHrd.classList.remove("hidden");
+        btnJobs.className = "nav-tab-inactive font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
+        btnHrd.className = "nav-tab-active font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
+    }
 }
