@@ -1,4 +1,4 @@
-// 1. KONFIGURASI FIREBASE
+// 1. KONFIGURASI FIREBASE (Terhubung ke Realtime Database Milikmu)
 const firebaseConfig = {
     databaseURL: "https://lokerkerja-f6a20-default-rtdb.asia-southeast1.firebasedatabase.app/",
     projectId: "lokerkerja-f6a20",
@@ -10,13 +10,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// PIN MASTER ADMIN WEB (Bisa digunakan admin untuk menghapus loker manapun)
+// PIN MASTER ADMIN WEB
 const ADMIN_MASTER_PIN = "admin123";
 
 let jobsData = [];
 let selectedJobForApply = null;
 
-// 2. REALTIME LISTENER
+// 2. REALTIME LISTENER (Sync Data Otomatis)
 document.addEventListener("DOMContentLoaded", () => {
     db.ref('jobs').on('value', (snapshot) => {
         const data = snapshot.val();
@@ -69,44 +69,42 @@ function handlePostJob(event) {
         salary: salary,
         skills: skillsArr,
         hrdWa: wa,
-        pin: pin, // Menyimpan PIN rahasia lowongan ini
+        pin: pin,
         date: new Date().toISOString().split('T')[0]
     };
 
     db.ref('jobs').push(newJob, (error) => {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan`;
+        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan SMABAJA`;
 
         if (error) {
             alert("Gagal mempublikasikan lowongan: " + error.message);
         } else {
-            alert("Berhasil! Lowongan dipublikasikan. Simpan PIN Anda untuk kebutuhan menghapus lowongan nanti.");
+            alert("Berhasil! Lowongan dipublikasikan di SMABAJA. Simpan PIN Anda untuk kebutuhan menghapus lowongan nanti.");
             document.getElementById("hrd-post-form").reset();
         }
     });
 }
 
-// 4. HAPUS LOKER DENGAN VERIFIKASI PIN (HRD ATAU ADMIN)
+// 4. HAPUS LOKER DENGAN VERIFIKASI PIN
 function deleteJob(id) {
     const targetJob = jobsData.find(j => j.id === id);
     if (!targetJob) return;
 
-    // Prompt verifikasi PIN ke pengguna
     const inputPin = prompt(`Konfirmasi Penghapusan Lowongan "${targetJob.title}":\n\nMasukkan PIN Rahasia HRD Anda (atau PIN Master Admin):`);
 
-    if (inputPin === null) return; // Pengguna klik Batal
+    if (inputPin === null) return;
 
-    // Cek apakah PIN cocok dengan PIN pembuatan loker ATAU PIN Master Admin
     if (inputPin === targetJob.pin || inputPin === ADMIN_MASTER_PIN) {
         db.ref('jobs/' + id).remove()
-            .then(() => alert("Akses Diterima: Lowongan berhasil dihapus dari database."))
+            .then(() => alert("Akses Diterima: Lowongan berhasil dihapus dari database SMABAJA."))
             .catch(err => alert("Gagal menghapus: " + err.message));
     } else {
-        alert("Akses Ditolak: PIN yang Anda masukkan salah! Hanya HRD pembuat lowongan atau Admin yang berhak menghapus.");
+        alert("Akses Ditolak: PIN salah! Hanya HRD pembuat lowongan atau Admin yang berhak menghapus.");
     }
 }
 
-// 5. RENDER DAFTAR LOKER DI HALAMAN PENCARI KERJA
+// 5. RENDER DAFTAR LOKER PENCARI KERJA
 function renderJobFeed(dataToRender) {
     const container = document.getElementById("job-container");
     const emptyState = document.getElementById("empty-state");
@@ -123,22 +121,22 @@ function renderJobFeed(dataToRender) {
     }
 
     dataToRender.forEach((job) => {
-        const skillsTags = job.skills.map(s => `<span class="bg-gray-100 text-gray-600 text-[11px] px-2 py-0.5 rounded font-medium">${s}</span>`).join(" ");
+        const skillsTags = job.skills.map(s => `<span class="bg-amber-100/60 text-amber-900 border border-amber-300 text-[11px] px-2 py-0.5 rounded font-medium">${s}</span>`).join(" ");
 
         const cardHTML = `
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition duration-300 p-6 flex flex-col justify-between h-full relative">
                 <div>
                     <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded border border-blue-100">${job.type}</span>
+                        <span class="text-xs bg-red-50 text-red-800 font-semibold px-2.5 py-1 rounded border border-red-200">${job.type}</span>
                         <span class="text-[11px] text-gray-400">${job.date}</span>
                     </div>
 
-                    <h3 class="text-lg font-bold text-gray-800 leading-snug">${job.title}</h3>
-                    <p class="text-sm font-semibold text-blue-600 mb-3">${job.company}</p>
+                    <h3 class="text-lg font-bold text-gray-900 leading-snug">${job.title}</h3>
+                    <p class="text-sm font-semibold text-red-800 mb-3">${job.company}</p>
 
                     <div class="space-y-1.5 mb-4 text-xs text-gray-600">
-                        <p class="flex items-center"><i class="fa-solid fa-location-dot w-4 text-gray-400"></i> ${job.location}</p>
-                        <p class="flex items-center"><i class="fa-solid fa-money-bill-wave w-4 text-gray-400"></i> ${job.salary}</p>
+                        <p class="flex items-center"><i class="fa-solid fa-location-dot w-4 text-amber-600"></i> ${job.location}</p>
+                        <p class="flex items-center"><i class="fa-solid fa-money-bill-wave w-4 text-amber-600"></i> ${job.salary}</p>
                     </div>
 
                     <div class="mb-5">
@@ -149,7 +147,7 @@ function renderJobFeed(dataToRender) {
                     </div>
                 </div>
 
-                <button onclick="openApplyModal('${job.id}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-sm transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                <button onclick="openApplyModal('${job.id}')" class="w-full bg-red-800 hover:bg-red-900 text-amber-300 font-bold py-2 rounded-lg text-sm transition duration-300 shadow-sm flex items-center justify-center gap-2 border border-amber-500">
                     <i class="fa-solid fa-paper-plane"></i> Lamar Sekarang
                 </button>
             </div>
@@ -167,7 +165,7 @@ function renderHRDList() {
     countLabel.innerText = `${jobsData.length} Total Loker Aktif`;
 
     if (jobsData.length === 0) {
-        container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">Belum ada lowongan terdaftar di Firebase.</p>`;
+        container.innerHTML = `<p class="text-sm text-gray-500 text-center py-6">Belum ada lowongan terdaftar di SMABAJA.</p>`;
         return;
     }
 
@@ -177,7 +175,7 @@ function renderHRDList() {
                 <div>
                     <h4 class="font-bold text-gray-800 text-sm">${job.title}</h4>
                     <p class="text-xs text-gray-600">${job.company} • ${job.location} (${job.type})</p>
-                    <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-lock text-gray-400 mr-1"></i> Terproteksi PIN HRD</p>
+                    <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-lock text-amber-600 mr-1"></i> Terproteksi PIN HRD</p>
                 </div>
                 <button onclick="deleteJob('${job.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold px-3 py-1.5 rounded text-xs border border-red-200 transition flex items-center gap-1">
                     <i class="fa-solid fa-lock-open"></i> Hapus (Butuh PIN)
@@ -257,13 +255,13 @@ function calculateRealtimeMatch() {
     scoreValEl.innerText = `${score}%`;
 
     if (score >= 75) {
-        scoreValEl.className = "text-xl font-black text-green-600";
+        scoreValEl.className = "text-xl font-black text-green-700";
         scoreLabelEl.innerText = "Sangat Cocok! Rekomendasi Tinggi";
     } else if (score >= 40) {
-        scoreValEl.className = "text-xl font-black text-amber-500";
+        scoreValEl.className = "text-xl font-black text-amber-600";
         scoreLabelEl.innerText = "Cukup Cocok";
     } else {
-        scoreValEl.className = "text-xl font-black text-red-500";
+        scoreValEl.className = "text-xl font-black text-red-700";
         scoreLabelEl.innerText = "Kurang Cocok dengan Kriteria";
     }
 }
@@ -280,7 +278,7 @@ function submitApplication(event) {
     const message = document.getElementById("applicant-message").value.trim();
     const aiScore = document.getElementById("modal-ai-score-val").innerText;
 
-    const textMsg = `Halo HRD *${selectedJobForApply.company}*,%0A%0APerkenalkan saya *${name}*. Saya melamar posisi *${selectedJobForApply.title}* via KerjaAI.%0A%0A📊 *AI Match Score Profile:* ${aiScore}%0A💪 *Keahlian/Skill:* ${skills}%0A📄 *Tautan CV/Portofolio:* ${cvLink}%0A%0A💬 *Catatan Pelamar:*%0A"${message}"%0A%0AMohon arahannya. Terima kasih!`;
+    const textMsg = `Halo HRD *${selectedJobForApply.company}*,%0A%0APerkenalkan saya *${name}*. Saya melamar posisi *${selectedJobForApply.title}* via portal *SMABAJA (SMA Bareng Kerja)*.%0A%0A📊 *AI Match Score Profile:* ${aiScore}%0A💪 *Keahlian/Skill:* ${skills}%0A📄 *Tautan CV/Portofolio:* ${cvLink}%0A%0A💬 *Catatan Pelamar:*%0A"${message}"%0A%0AMohon arahannya. Terima kasih!`;
 
     const waUrl = `https://wa.me/${selectedJobForApply.hrdWa}?text=${textMsg}`;
     window.open(waUrl, "_blank");
@@ -307,4 +305,5 @@ function switchTab(tabName) {
         btnJobs.className = "nav-tab-inactive font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
         btnHrd.className = "nav-tab-active font-medium px-3 py-2 text-sm rounded-lg transition duration-200";
     }
+}
 }
