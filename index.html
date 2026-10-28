@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KerjaAI - Job Portal Cerdas</title>
+    
+    <!-- Memanggil Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memanggil Font Awesome untuk Ikon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Memanggil file CSS kita sendiri -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans selection:bg-blue-500 selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm fixed w-full z-10 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-briefcase text-blue-600 text-2xl mr-2"></i>
+                    <span class="font-bold text-xl tracking-tight text-blue-900">Kerja<span class="text-blue-500">AI</span></span>
+                </div>
+                <div class="flex gap-4">
+                    <a href="#cari-loker" class="text-gray-600 hover:text-blue-600 font-medium px-3 py-2">Cari Loker</a>
+                    <a href="#pasang-loker" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition duration-300">Pasang Loker</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-24 pb-12 bg-gradient-to-br from-blue-900 to-blue-700 text-white text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Temukan Karier Impianmu dengan Bantuan AI</h1>
+            <p class="text-lg text-blue-200 mb-8">Kirim CV langsung terhubung ke WhatsApp HRD. Cepat, transparan, tanpa perantara ribet!</p>
+            <div class="flex justify-center">
+                <input type="text" placeholder="Cari posisi..." class="w-full md:w-1/2 px-4 py-3 rounded-l-lg text-gray-800 focus:outline-none">
+                <button class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-r-lg font-bold transition duration-300">Cari</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Daftar Lowongan Pekerjaan -->
+    <section id="cari-loker" class="max-w-7xl mx-auto px-4 py-12">
+        <div class="flex justify-between items-end mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Lowongan Terbaru</h2>
+                <p class="text-gray-500">Rekomendasi terbaik berdasarkan tren saat ini.</p>
+            </div>
+        </div>
+        <!-- Container Loker (Diisi oleh JS) -->
+        <div id="job-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- Section Pasang Loker -->
+    <section id="pasang-loker" class="bg-blue-50 py-12 mt-12 border-t border-blue-100">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Anda Perusahaan yang Mencari Talenta?</h2>
+            <p class="text-gray-600 mb-6">Dapatkan kandidat terbaik langsung ke WhatsApp HRD Anda.</p>
+            <button onclick="alert('Fitur Pasang Loker akan diarahkan ke Dashboard HRD.')" class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition duration-300">
+                <i class="fa-solid fa-plus mr-2"></i> Buat Lowongan Baru
+            </button>
+        </div>
+    </section>
+
+    <!-- Modal Pengajuan Loker (Apply Job) -->
+    <div id="apply-modal" class="hidden-modal fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex justify-center items-center px-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-800">Kirim Lamaran</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
+            </div>
+            
+            <form id="apply-form" class="p-6" onsubmit="submitApplication(event)">
+                <div class="mb-4 text-sm bg-blue-50 p-3 rounded-lg text-blue-800">
+                    Melamar posisi: <strong id="modal-job-title" class="block text-lg">Posisi</strong>
+                    di <span id="modal-company-name">Perusahaan</span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Nama Lengkap</label>
+                    <input type="text" id="applicant-name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Misal: Budi Santoso">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Upload CV (PDF)</label>
+                    <input type="file" id="applicant-cv" required accept=".pdf" class="w-full text-gray-500 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Pesan Singkat (Promosikan Diri Anda)</label>
+                    <textarea id="applicant-message" rows="3" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Halo HRD..."></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold flex items-center gap-2 transition duration-300">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Kirim & Chat HRD
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm mt-auto">
+        <p>&copy; 2026 KerjaAI by Siswa Hebat. Prototipe Bisnis Digital.</p>
+    </footer>
+
+    <!-- Memanggil file JavaScript kita -->
+    <script src="script.js"></script>
+</body>
+</html>
