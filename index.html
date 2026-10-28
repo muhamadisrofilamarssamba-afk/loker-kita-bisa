@@ -149,6 +149,15 @@
                                 <input type="text" id="post-skills" required placeholder="Contoh: HTML, CSS, JavaScript" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
                             </div>
 
+                            <!-- INPUT PIN RAHASIA UNTUK MANAJEMEN/HAPUS LOKER -->
+                            <div>
+                                <label class="block text-xs font-bold text-red-600 uppercase mb-1">
+                                    <i class="fa-solid fa-key mr-1"></i> PIN Hapus Loker (Rahasia HRD)
+                                </label>
+                                <input type="password" id="post-pin" required maxlength="6" placeholder="Masukkan 4-6 digit PIN" class="w-full px-3 py-2 border border-red-200 rounded-lg text-sm focus:outline-none focus:border-red-500 bg-red-50/30">
+                                <p class="text-[11px] text-gray-500 mt-0.5">PIN ini digunakan sebagai syarat saat Anda ingin menghapus lowongan ini.</p>
+                            </div>
+
                             <button type="submit" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-sm transition duration-300 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan
                             </button>
@@ -159,7 +168,7 @@
                     <div class="lg:col-span-7">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                             <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center justify-between">
-                                <span><i class="fa-solid fa-list-check text-blue-600 mr-2"></i> Daftar Loker Aktif</span>
+                                <span><i class="fa-solid fa-list-check text-blue-600 mr-2"></i> Kelola Loker Aktif</span>
                                 <span id="hrd-job-count" class="text-xs font-normal text-gray-500">0 Total Loker</span>
                             </h2>
 
@@ -230,7 +239,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-400 py-6 text-center text-xs border-t border-gray-800">
-        <p>&copy; 2026 KerjaAI Pro - Realtime Database Active.</p>
+        <p>&copy; 2026 KerjaAI Pro - Protected Database Active.</p>
     </footer>
 
     <!-- Custom JavaScript -->
