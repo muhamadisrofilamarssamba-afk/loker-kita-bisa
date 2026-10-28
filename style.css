@@ -1,0 +1,9 @@
+/* Mencegah background scroll saat form lamaran terbuka */
+body.modal-open { 
+    overflow: hidden; 
+}
+
+/* Memastikan modal benar-benar hilang saat ditutup */
+.hidden-modal { 
+    display: none !important; 
+}
