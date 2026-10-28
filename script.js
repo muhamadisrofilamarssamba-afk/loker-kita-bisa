@@ -1,4 +1,4 @@
-// 1. KONFIGURASI FIREBASE (Terhubung ke database milikmu)
+// 1. KONFIGURASI FIREBASE
 const firebaseConfig = {
     databaseURL: "https://lokerkerja-f6a20-default-rtdb.asia-southeast1.firebasedatabase.app/",
     projectId: "lokerkerja-f6a20",
@@ -10,10 +10,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// PIN MASTER ADMIN WEB (Bisa digunakan admin untuk menghapus loker manapun)
+const ADMIN_MASTER_PIN = "admin123";
+
 let jobsData = [];
 let selectedJobForApply = null;
 
-// 2. REALTIME LISTENER (Sync Data Otomatis Tanpa Refresh Halaman)
+// 2. REALTIME LISTENER
 document.addEventListener("DOMContentLoaded", () => {
     db.ref('jobs').on('value', (snapshot) => {
         const data = snapshot.val();
@@ -22,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data) {
             Object.keys(data).forEach((key) => {
                 jobsData.unshift({
-                    id: key, // Menggunakan ID unik dari Firebase
+                    id: key,
                     ...data[key]
                 });
             });
@@ -33,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// 3. TAMBAH LOKER BARU KE FIREBASE (Fungsi HRD)
+// 3. TAMBAH LOKER BARU DENGAN PIN RAHASIA
 function handlePostJob(event) {
     event.preventDefault();
 
@@ -48,8 +51,9 @@ function handlePostJob(event) {
     const salary = document.getElementById("post-salary").value.trim();
     let wa = document.getElementById("post-wa").value.trim();
     const skillsRaw = document.getElementById("post-skills").value;
+    const pin = document.getElementById("post-pin").value.trim();
 
-    // Sanitasi Format WhatsApp (mengubah 08xx menjadi 628xx)
+    // Sanitasi Format WhatsApp
     wa = wa.replace(/[^0-9]/g, '');
     if (wa.startsWith("0")) {
         wa = "62" + wa.slice(1);
@@ -65,10 +69,10 @@ function handlePostJob(event) {
         salary: salary,
         skills: skillsArr,
         hrdWa: wa,
+        pin: pin, // Menyimpan PIN rahasia lowongan ini
         date: new Date().toISOString().split('T')[0]
     };
 
-    // Push data ke Node 'jobs' di Firebase
     db.ref('jobs').push(newJob, (error) => {
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan`;
@@ -76,18 +80,29 @@ function handlePostJob(event) {
         if (error) {
             alert("Gagal mempublikasikan lowongan: " + error.message);
         } else {
-            alert("Berhasil! Lowongan dipublikasikan secara realtime ke Firebase.");
+            alert("Berhasil! Lowongan dipublikasikan. Simpan PIN Anda untuk kebutuhan menghapus lowongan nanti.");
             document.getElementById("hrd-post-form").reset();
         }
     });
 }
 
-// 4. HAPUS LOKER REALTIME (Fungsi HRD)
+// 4. HAPUS LOKER DENGAN VERIFIKASI PIN (HRD ATAU ADMIN)
 function deleteJob(id) {
-    if (confirm("Apakah Anda yakin ingin menghapus lowongan ini dari database?")) {
+    const targetJob = jobsData.find(j => j.id === id);
+    if (!targetJob) return;
+
+    // Prompt verifikasi PIN ke pengguna
+    const inputPin = prompt(`Konfirmasi Penghapusan Lowongan "${targetJob.title}":\n\nMasukkan PIN Rahasia HRD Anda (atau PIN Master Admin):`);
+
+    if (inputPin === null) return; // Pengguna klik Batal
+
+    // Cek apakah PIN cocok dengan PIN pembuatan loker ATAU PIN Master Admin
+    if (inputPin === targetJob.pin || inputPin === ADMIN_MASTER_PIN) {
         db.ref('jobs/' + id).remove()
-            .then(() => alert("Lowongan berhasil dihapus dari Firebase."))
+            .then(() => alert("Akses Diterima: Lowongan berhasil dihapus dari database."))
             .catch(err => alert("Gagal menghapus: " + err.message));
+    } else {
+        alert("Akses Ditolak: PIN yang Anda masukkan salah! Hanya HRD pembuat lowongan atau Admin yang berhak menghapus.");
     }
 }
 
@@ -162,10 +177,10 @@ function renderHRDList() {
                 <div>
                     <h4 class="font-bold text-gray-800 text-sm">${job.title}</h4>
                     <p class="text-xs text-gray-600">${job.company} • ${job.location} (${job.type})</p>
-                    <p class="text-[11px] text-gray-400 mt-1">WA: +${job.hrdWa}</p>
+                    <p class="text-[11px] text-gray-400 mt-1"><i class="fa-solid fa-lock text-gray-400 mr-1"></i> Terproteksi PIN HRD</p>
                 </div>
-                <button onclick="deleteJob('${job.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold px-3 py-1.5 rounded text-xs border border-red-200 transition">
-                    <i class="fa-solid fa-trash-can mr-1"></i> Hapus
+                <button onclick="deleteJob('${job.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold px-3 py-1.5 rounded text-xs border border-red-200 transition flex items-center gap-1">
+                    <i class="fa-solid fa-lock-open"></i> Hapus (Butuh PIN)
                 </button>
             </div>
         `;
