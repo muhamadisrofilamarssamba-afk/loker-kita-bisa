@@ -1,18 +1,16 @@
 /* ==========================================================================
-   KerjaAI Pro - Tema Nusantara & Kebudayaan Indonesia
+   SMABAJA - Tema Nusantara & Kebudayaan Indonesia
    ========================================================================== */
 
 /* 1. Design Tokens & Warna Khas Nusantara */
 :root {
-    /* Palet Warna Adat */
     --kain-marun: #800020;         /* Merah Marun / Khas Kain Ulos & Songket */
     --kayu-jati: #4a2c11;          /* Cokelat Kayu Jati / Rumah Adat */
     --emas-prada: #d4af37;         /* Emas / Ukiran Batik & Perhiasan Adat */
     --emas-hover: #b89628;
     --krem-candi: #fdfbf7;         /* Warna Latar Krem Tekstur Batu Candi/Bambu */
     
-    /* UI Accent & Effects */
-    --primary-blue: #800020;       /* Menggantikan biru utama menjadi Merah Marun */
+    --primary-blue: #800020;       
     --primary-hover: #5c0017;
     --accent-glow: rgba(212, 175, 55, 0.25);
     --glass-bg: rgba(253, 251, 247, 0.92);
@@ -32,7 +30,6 @@ body {
     color: #2d2621;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
-    /* Pattern Megamendung / Batik Geometris Halus */
     background-image: radial-gradient(#d4af37 0.65px, transparent 0.65px), radial-gradient(#d4af37 0.65px, var(--krem-candi) 0.65px);
     background-size: 26px 26px;
     background-position: 0 0, 13px 13px;
@@ -72,7 +69,6 @@ header.bg-gradient-to-br {
     overflow: hidden;
 }
 
-/* Motif Hiasan Header */
 header.bg-gradient-to-br::before {
     content: "";
     position: absolute;
@@ -97,7 +93,6 @@ body.modal-open {
     background-color: rgba(43, 20, 4, 0.6);
 }
 
-/* Animasi Muncul Modal */
 #apply-modal:not(.hidden-modal) > div {
     animation: nusantaraModalUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     border: 2px solid var(--emas-prada);
@@ -179,14 +174,12 @@ button:active {
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
 }
 
-/* Badges / Label AI Match Score */
 .bg-blue-50 {
     background-color: #fdf8eb !important;
     color: var(--kayu-jati) !important;
     border-color: #ebd79b !important;
 }
 
-/* Focus Input dengan Kilau Emas */
 input:focus, select:focus, textarea:focus {
     border-color: var(--emas-prada) !important;
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25) !important;
