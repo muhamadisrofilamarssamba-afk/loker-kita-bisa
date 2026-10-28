@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KerjaAI Pro - Portal Lowongan Kerja Realtime</title>
+    <title>SMABAJA - SMA Bareng Kerja</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Custom CSS Nusantara -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Firebase SDK (Compat Mode) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col selection:bg-red-800 selection:text-amber-200">
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm fixed w-full z-20 top-0">
+    <!-- Navbar dengan Branding SMABAJA -->
+    <nav class="bg-white shadow-sm fixed w-full z-20 top-0 border-b-2 border-amber-600">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
+                <!-- LOGO SMABAJA -->
                 <div class="flex items-center cursor-pointer" onclick="switchTab('jobs')">
-                    <i class="fa-solid fa-briefcase text-blue-600 text-2xl mr-2"></i>
-                    <span class="font-bold text-xl tracking-tight text-blue-900">Kerja<span class="text-blue-500">AI</span> <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded ml-1">REALTIME</span></span>
+                    <i class="fa-solid fa-user-graduate text-red-800 text-2xl mr-2.5"></i>
+                    <div class="flex flex-col">
+                        <span class="font-black text-xl tracking-tight text-red-900 leading-none">SMA<span class="text-amber-600">BAJA</span></span>
+                        <span class="text-[10px] font-semibold tracking-wider text-amber-700 uppercase">SMA Bareng Kerja</span>
+                    </div>
                 </div>
                 
                 <div class="flex gap-2 sm:gap-4">
@@ -44,10 +48,14 @@
         
         <!-- SECTION 1: PENCARI KERJA -->
         <div id="tab-jobs" class="block">
-            <header class="py-12 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white text-center">
-                <div class="max-w-4xl mx-auto px-4">
-                    <h1 class="text-3xl md:text-5xl font-extrabold mb-4">Temukan Karier Impianmu dengan AI Matcher</h1>
-                    <p class="text-base md:text-lg text-blue-200 mb-8">Kirim lamaran terintegrasi langsung ke WhatsApp HRD secara konsisten.</p>
+            <!-- HERO BANNER -->
+            <header class="py-12 bg-gradient-to-br from-red-950 via-red-900 to-amber-950 text-white text-center relative overflow-hidden">
+                <div class="max-w-4xl mx-auto px-4 relative z-10">
+                    <span class="inline-block bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-3">
+                        🎓 Portal Kerjaya Khusus Alumni & Siswa
+                    </span>
+                    <h1 class="text-3xl md:text-5xl font-extrabold mb-3 tracking-tight">SMA BARENG KERJA (SMABAJA)</h1>
+                    <p class="text-base md:text-lg text-amber-100/90 mb-8 max-w-2xl mx-auto">Temukan lowongan kerja impian khusus lulusan SMA. Hubungkan diri Anda langsung ke WhatsApp HRD secara konsisten dan terpercaya.</p>
                     
                     <!-- Search & Filter Bar -->
                     <div class="bg-white p-3 rounded-xl shadow-lg text-gray-800 flex flex-col md:flex-row gap-3">
@@ -63,7 +71,7 @@
                                 <option value="Remote">Remote</option>
                                 <option value="Freelance">Freelance</option>
                             </select>
-                            <button onclick="filterJobs()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-sm transition duration-300">
+                            <button onclick="filterJobs()" class="bg-red-800 hover:bg-red-900 text-amber-300 border border-amber-500 font-bold px-5 py-2 rounded-lg text-sm transition duration-300">
                                 Cari
                             </button>
                         </div>
@@ -75,9 +83,9 @@
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800">Lowongan Pekerjaan Terbaru</h2>
-                        <p class="text-sm text-gray-500">Data terhubung langsung secara cloud realtime.</p>
+                        <p class="text-sm text-gray-500">Peluang kerja terbaik untuk lulusan dan siswa SMA.</p>
                     </div>
-                    <div id="job-count-badge" class="bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full text-xs border border-blue-200">
+                    <div id="job-count-badge" class="bg-amber-50 text-red-900 font-semibold px-3 py-1 rounded-full text-xs border border-amber-300">
                         Memuat data...
                     </div>
                 </div>
@@ -87,7 +95,7 @@
                 <div id="empty-state" class="hidden text-center py-16 bg-white rounded-xl border border-gray-200 my-6">
                     <i class="fa-solid fa-folder-open text-5xl text-gray-300 mb-3"></i>
                     <h3 class="text-lg font-bold text-gray-700">Tidak ada lowongan ditemukan</h3>
-                    <p class="text-sm text-gray-500 max-w-md mx-auto mt-1">Belum ada lowongan terpasang atau coba ubah kata kunci filter Anda.</p>
+                    <p class="text-sm text-gray-500 max-w-md mx-auto mt-1">Belum ada lowongan terpasang di SMABAJA atau coba sesuaikan filter Anda.</p>
                 </div>
             </section>
         </div>
@@ -96,36 +104,36 @@
         <div id="tab-hrd" class="hidden">
             <div class="max-w-7xl mx-auto px-4 py-10">
                 <div class="mb-8 border-b pb-6">
-                    <h1 class="text-3xl font-extrabold text-gray-900">Dashboard Perusahaan / HRD</h1>
-                    <p class="text-gray-600 mt-1">Pasang lowongan baru dan kelola lowongan aktif Anda secara realtime.</p>
+                    <h1 class="text-3xl font-extrabold text-gray-900">Dashboard Mitra Perusahaan / HRD</h1>
+                    <p class="text-gray-600 mt-1">Pasang lowongan baru untuk mendapatkan talenta terbaik lulusan SMA di SMABAJA.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     <!-- Form Pasang Loker -->
                     <div class="lg:col-span-5 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                         <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
-                            <i class="fa-solid fa-plus-circle text-blue-600 mr-2"></i> Buat Lowongan Baru
+                            <i class="fa-solid fa-plus-circle text-red-800 mr-2"></i> Buat Lowongan Baru
                         </h2>
 
                         <form id="hrd-post-form" onsubmit="handlePostJob(event)" class="space-y-4">
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Judul Posisi Pekerjaan</label>
-                                <input type="text" id="post-title" required placeholder="Contoh: Frontend Developer" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                                <input type="text" id="post-title" required placeholder="Contoh: Staff Admin / Sales Executive" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800">
                             </div>
 
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Perusahaan</label>
-                                <input type="text" id="post-company" required placeholder="Contoh: PT Teknologi Bangsa" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                                <input type="text" id="post-company" required placeholder="Contoh: PT Nusantara Mandiri" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800">
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Lokasi</label>
-                                    <input type="text" id="post-location" required placeholder="Jakarta / Remote" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                                    <input type="text" id="post-location" required placeholder="Jakarta / Remote" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tipe Kerja</label>
-                                    <select id="post-type" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                                    <select id="post-type" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800">
                                         <option value="Full-time">Full-time</option>
                                         <option value="Part-time">Part-time</option>
                                         <option value="Remote">Remote</option>
@@ -136,30 +144,28 @@
 
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Estimasi Gaji</label>
-                                <input type="text" id="post-salary" required placeholder="Contoh: Rp 5.000.000 - 8.000.000" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                                <input type="text" id="post-salary" required placeholder="Contoh: Rp 3.500.000 - 5.000.000" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800">
                             </div>
 
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nomor WhatsApp HRD</label>
-                                <input type="text" id="post-wa" required placeholder="Contoh: 6281234567890 (Gunakan kode 62)" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                                <input type="text" id="post-wa" required placeholder="Contoh: 6281234567890 (Gunakan kode 62)" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800">
                             </div>
 
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kualifikasi / Skill Utama</label>
-                                <input type="text" id="post-skills" required placeholder="Contoh: HTML, CSS, JavaScript" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                                <input type="text" id="post-skills" required placeholder="Contoh: Ms Office, Komunikasi, Bahasa Inggris" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800">
                             </div>
 
-                            <!-- INPUT PIN RAHASIA UNTUK MANAJEMEN/HAPUS LOKER -->
                             <div>
-                                <label class="block text-xs font-bold text-red-600 uppercase mb-1">
+                                <label class="block text-xs font-bold text-red-700 uppercase mb-1">
                                     <i class="fa-solid fa-key mr-1"></i> PIN Hapus Loker (Rahasia HRD)
                                 </label>
                                 <input type="password" id="post-pin" required maxlength="6" placeholder="Masukkan 4-6 digit PIN" class="w-full px-3 py-2 border border-red-200 rounded-lg text-sm focus:outline-none focus:border-red-500 bg-red-50/30">
-                                <p class="text-[11px] text-gray-500 mt-0.5">PIN ini digunakan sebagai syarat saat Anda ingin menghapus lowongan ini.</p>
                             </div>
 
-                            <button type="submit" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-sm transition duration-300 flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan
+                            <button type="submit" id="submit-btn" class="w-full bg-red-800 hover:bg-red-900 text-amber-300 font-bold py-2.5 rounded-lg text-sm transition duration-300 flex items-center justify-center gap-2 border border-amber-500">
+                                <i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan SMABAJA
                             </button>
                         </form>
                     </div>
@@ -168,7 +174,7 @@
                     <div class="lg:col-span-7">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                             <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center justify-between">
-                                <span><i class="fa-solid fa-list-check text-blue-600 mr-2"></i> Kelola Loker Aktif</span>
+                                <span><i class="fa-solid fa-list-check text-red-800 mr-2"></i> Kelola Loker Aktif SMABAJA</span>
                                 <span id="hrd-job-count" class="text-xs font-normal text-gray-500">0 Total Loker</span>
                             </h2>
 
@@ -183,30 +189,30 @@
 
     <!-- Modal Form Lamaran -->
     <div id="apply-modal" class="hidden-modal fixed inset-0 bg-gray-900 bg-opacity-60 z-50 flex justify-center items-center px-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden border-2 border-amber-600">
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800">Formulir Lamaran Kerja</h3>
+                    <h3 class="text-lg font-bold text-red-900">Formulir Lamaran SMABAJA</h3>
                     <p class="text-xs text-gray-500">Terhubung langsung ke WhatsApp HRD.</p>
                 </div>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
             </div>
             
             <form id="apply-form" class="p-6" onsubmit="submitApplication(event)">
-                <div class="mb-4 text-xs bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-900">
+                <div class="mb-4 text-xs bg-amber-50 p-3 rounded-lg border border-amber-200 text-red-950">
                     <span class="text-gray-500 block">Melamar Posisi:</span>
-                    <strong id="modal-job-title" class="text-base font-bold text-blue-800 block">Judul Posisi</strong>
+                    <strong id="modal-job-title" class="text-base font-bold text-red-900 block">Judul Posisi</strong>
                     <span id="modal-company-name" class="font-medium text-gray-700">Nama Perusahaan</span>
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Nama Lengkap Pelamar</label>
-                    <input type="text" id="applicant-name" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Masukkan nama Anda">
+                    <input type="text" id="applicant-name" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800" placeholder="Masukkan nama Anda">
                 </div>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Skill / Keahlian Anda</label>
-                    <input type="text" id="applicant-skills" oninput="calculateRealtimeMatch()" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Contoh: HTML, CSS, JavaScript">
+                    <input type="text" id="applicant-skills" oninput="calculateRealtimeMatch()" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800" placeholder="Contoh: Ms Office, Komunikasi">
                 </div>
 
                 <div class="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between">
@@ -214,22 +220,22 @@
                         <span class="text-xs font-bold text-gray-700 block">AI Match Score Live:</span>
                         <span id="modal-ai-score-label" class="text-xs text-gray-500">Ketik skill Anda di atas</span>
                     </div>
-                    <div id="modal-ai-score-val" class="text-xl font-black text-blue-600">0%</div>
+                    <div id="modal-ai-score-val" class="text-xl font-black text-red-800">0%</div>
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Tautan CV (Google Drive / Portofolio)</label>
-                    <input type="url" id="applicant-cv-link" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="https://drive.google.com/file/d/...">
+                    <input type="url" id="applicant-cv-link" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800" placeholder="https://drive.google.com/file/d/...">
                 </div>
 
                 <div class="mb-6">
                     <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Pesan Singkat</label>
-                    <textarea id="applicant-message" rows="3" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Jelaskan motivasi atau pengalaman singkat Anda..."></textarea>
+                    <textarea id="applicant-message" rows="3" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-red-800" placeholder="Jelaskan motivasi atau lulusan SMA mana Anda..."></textarea>
                 </div>
 
                 <div class="flex justify-end gap-3 pt-2 border-t">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-bold flex items-center gap-2 transition duration-300">
+                    <button type="submit" class="px-5 py-2 bg-green-700 hover:bg-green-800 text-white rounded-lg text-sm font-bold flex items-center gap-2 transition duration-300 shadow-sm">
                         <i class="fa-brands fa-whatsapp text-lg"></i> Kirim & Chat HRD
                     </button>
                 </div>
@@ -238,8 +244,8 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-6 text-center text-xs border-t border-gray-800">
-        <p>&copy; 2026 KerjaAI Pro - Protected Database Active.</p>
+    <footer class="bg-gray-900 text-gray-400 py-6 text-center text-xs border-t border-amber-900">
+        <p>&copy; 2026 SMABAJA (SMA Bareng Kerja) - Platform Karir Siswa & Alumni SMA.</p>
     </footer>
 
     <!-- Custom JavaScript -->
