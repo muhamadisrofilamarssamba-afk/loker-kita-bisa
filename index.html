@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KerjaAI Pro - Portal Lowongan Kerja & Rekrutmen AI</title>
+    <title>KerjaAI Pro - Portal Lowongan Kerja Realtime</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,19 +11,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase SDK (Compat Mode) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
-    <!-- Header / Navbar -->
+    <!-- Navbar -->
     <nav class="bg-white shadow-sm fixed w-full z-20 top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center cursor-pointer" onclick="switchTab('jobs')">
                     <i class="fa-solid fa-briefcase text-blue-600 text-2xl mr-2"></i>
-                    <span class="font-bold text-xl tracking-tight text-blue-900">Kerja<span class="text-blue-500">AI</span> <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded ml-1">PRO</span></span>
+                    <span class="font-bold text-xl tracking-tight text-blue-900">Kerja<span class="text-blue-500">AI</span> <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded ml-1">REALTIME</span></span>
                 </div>
                 
-                <!-- Tab Navigation -->
                 <div class="flex gap-2 sm:gap-4">
                     <button id="nav-btn-jobs" onclick="switchTab('jobs')" class="nav-tab-active font-medium px-3 py-2 text-sm rounded-lg transition duration-200">
                         <i class="fa-solid fa-magnifying-glass mr-1"></i> Cari Loker
@@ -39,13 +42,12 @@
     <!-- Content Area -->
     <main class="pt-16 flex-grow">
         
-        <!-- SECTION 1: HALAMAN PENCARI KERJA -->
+        <!-- SECTION 1: PENCARI KERJA -->
         <div id="tab-jobs" class="block">
-            <!-- Hero Banner -->
             <header class="py-12 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white text-center">
                 <div class="max-w-4xl mx-auto px-4">
                     <h1 class="text-3xl md:text-5xl font-extrabold mb-4">Temukan Karier Impianmu dengan AI Matcher</h1>
-                    <p class="text-base md:text-lg text-blue-200 mb-8">Kirim lamaran terintegrasi langsung ke WhatsApp HRD tanpa perantara.</p>
+                    <p class="text-base md:text-lg text-blue-200 mb-8">Kirim lamaran terintegrasi langsung ke WhatsApp HRD secara konsisten.</p>
                     
                     <!-- Search & Filter Bar -->
                     <div class="bg-white p-3 rounded-xl shadow-lg text-gray-800 flex flex-col md:flex-row gap-3">
@@ -69,47 +71,37 @@
                 </div>
             </header>
 
-            <!-- Main Job Feed -->
             <section class="max-w-7xl mx-auto px-4 py-10">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800">Lowongan Pekerjaan Terbaru</h2>
-                        <p class="text-sm text-gray-500">Menampilkan lowongan aktif dari perusahaan terverifikasi.</p>
+                        <p class="text-sm text-gray-500">Data terhubung langsung secara cloud realtime.</p>
                     </div>
                     <div id="job-count-badge" class="bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full text-xs border border-blue-200">
-                        0 Lowongan Ditemukan
+                        Memuat data...
                     </div>
                 </div>
 
-                <!-- Job Cards Grid -->
-                <div id="job-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Cards dipanggil via script.js -->
-                </div>
+                <div id="job-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-                <!-- Empty State -->
                 <div id="empty-state" class="hidden text-center py-16 bg-white rounded-xl border border-gray-200 my-6">
                     <i class="fa-solid fa-folder-open text-5xl text-gray-300 mb-3"></i>
                     <h3 class="text-lg font-bold text-gray-700">Tidak ada lowongan ditemukan</h3>
-                    <p class="text-sm text-gray-500 max-w-md mx-auto mt-1">Coba sesuaikan kata kunci atau tipe pekerjaan pada filter di atas.</p>
+                    <p class="text-sm text-gray-500 max-w-md mx-auto mt-1">Belum ada lowongan terpasang atau coba ubah kata kunci filter Anda.</p>
                 </div>
             </section>
         </div>
 
-        <!-- SECTION 2: DASHBOARD HRD (MEMPASANG & KELOLA LOKER) -->
+        <!-- SECTION 2: DASHBOARD HRD -->
         <div id="tab-hrd" class="hidden">
             <div class="max-w-7xl mx-auto px-4 py-10">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b pb-6">
-                    <div>
-                        <h1 class="text-3xl font-extrabold text-gray-900">Dashboard Perusahaan / HRD</h1>
-                        <p class="text-gray-600 mt-1">Pasang lowongan baru dan kelola daftar loker yang sedang aktif secara mandiri.</p>
-                    </div>
-                    <button onclick="resetDefaultJobs()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg border border-gray-300 transition">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset Data Bawaan
-                    </button>
+                <div class="mb-8 border-b pb-6">
+                    <h1 class="text-3xl font-extrabold text-gray-900">Dashboard Perusahaan / HRD</h1>
+                    <p class="text-gray-600 mt-1">Pasang lowongan baru dan kelola lowongan aktif Anda secara realtime.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Form Pasang Loker Baru -->
+                    <!-- Form Pasang Loker -->
                     <div class="lg:col-span-5 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                         <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center">
                             <i class="fa-solid fa-plus-circle text-blue-600 mr-2"></i> Buat Lowongan Baru
@@ -150,22 +142,20 @@
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nomor WhatsApp HRD</label>
                                 <input type="text" id="post-wa" required placeholder="Contoh: 6281234567890 (Gunakan kode 62)" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
-                                <p class="text-[11px] text-gray-500 mt-0.5">Format nomor harus diawali dengan 62 (bukan 08).</p>
                             </div>
 
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kualifikasi / Skill Utama</label>
-                                <input type="text" id="post-skills" required placeholder="Contoh: HTML, CSS, JavaScript, React" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
-                                <p class="text-[11px] text-gray-500 mt-0.5">Pisahkan dengan koma. Digunakan untuk perhitungan AI Match Score.</p>
+                                <input type="text" id="post-skills" required placeholder="Contoh: HTML, CSS, JavaScript" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500">
                             </div>
 
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-sm transition duration-300 flex items-center justify-center gap-2">
+                            <button type="submit" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-sm transition duration-300 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-paper-plane"></i> Publikasikan Lowongan
                             </button>
                         </form>
                     </div>
 
-                    <!-- Daftar Loker Yang Aktif (Management) -->
+                    <!-- Kelola Loker HRD -->
                     <div class="lg:col-span-7">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                             <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center justify-between">
@@ -173,9 +163,7 @@
                                 <span id="hrd-job-count" class="text-xs font-normal text-gray-500">0 Total Loker</span>
                             </h2>
 
-                            <div id="hrd-job-list" class="space-y-4">
-                                <!-- Dipanggil via script.js -->
-                            </div>
+                            <div id="hrd-job-list" class="space-y-4"></div>
                         </div>
                     </div>
                 </div>
@@ -184,19 +172,18 @@
 
     </main>
 
-    <!-- Modal Form Pengajuan Lamaran -->
+    <!-- Modal Form Lamaran -->
     <div id="apply-modal" class="hidden-modal fixed inset-0 bg-gray-900 bg-opacity-60 z-50 flex justify-center items-center px-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <div>
                     <h3 class="text-lg font-bold text-gray-800">Formulir Lamaran Kerja</h3>
-                    <p class="text-xs text-gray-500">Kirim lamaran langsung ke pihak perekrut.</p>
+                    <p class="text-xs text-gray-500">Terhubung langsung ke WhatsApp HRD.</p>
                 </div>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
             </div>
             
             <form id="apply-form" class="p-6" onsubmit="submitApplication(event)">
-                <!-- Job Overview Box -->
                 <div class="mb-4 text-xs bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-900">
                     <span class="text-gray-500 block">Melamar Posisi:</span>
                     <strong id="modal-job-title" class="text-base font-bold text-blue-800 block">Judul Posisi</strong>
@@ -205,39 +192,35 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Nama Lengkap Pelamar</label>
-                    <input type="text" id="applicant-name" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Masukkan nama lengkap Anda">
+                    <input type="text" id="applicant-name" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Masukkan nama Anda">
                 </div>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Skill / Keahlian Anda</label>
-                    <input type="text" id="applicant-skills" oninput="calculateRealtimeMatch()" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Contoh: HTML, CSS, JavaScript, Photoshop">
-                    <p class="text-[11px] text-gray-500 mt-1">Sistem AI akan menghitung skor persentase kecocokan secara langsung.</p>
+                    <input type="text" id="applicant-skills" oninput="calculateRealtimeMatch()" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Contoh: HTML, CSS, JavaScript">
                 </div>
 
-                <!-- AI Score Indicator Box -->
                 <div class="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between">
                     <div>
                         <span class="text-xs font-bold text-gray-700 block">AI Match Score Live:</span>
                         <span id="modal-ai-score-label" class="text-xs text-gray-500">Ketik skill Anda di atas</span>
                     </div>
-                    <div id="modal-ai-score-val" class="text-xl font-black text-blue-600">
-                        0%
-                    </div>
+                    <div id="modal-ai-score-val" class="text-xl font-black text-blue-600">0%</div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Lampirkan Tautan CV (Google Drive / LinkedIn / Portfolio)</label>
+                    <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Tautan CV (Google Drive / Portofolio)</label>
                     <input type="url" id="applicant-cv-link" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="https://drive.google.com/file/d/...">
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Pesan Singkat (Promosikan Diri Anda)</label>
-                    <textarea id="applicant-message" rows="3" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Jelaskan secara singkat pengalaman atau motivasi Anda melamar posisi ini..."></textarea>
+                    <label class="block text-gray-700 text-xs font-bold uppercase mb-1">Pesan Singkat</label>
+                    <textarea id="applicant-message" rows="3" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Jelaskan motivasi atau pengalaman singkat Anda..."></textarea>
                 </div>
 
                 <div class="flex justify-end gap-3 pt-2 border-t">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-bold flex items-center gap-2 transition duration-300 shadow-sm">
+                    <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-bold flex items-center gap-2 transition duration-300">
                         <i class="fa-brands fa-whatsapp text-lg"></i> Kirim & Chat HRD
                     </button>
                 </div>
@@ -247,7 +230,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-400 py-6 text-center text-xs border-t border-gray-800">
-        <p>&copy; 2026 KerjaAI Pro - Platform Digital Wirausaha Siswa.</p>
+        <p>&copy; 2026 KerjaAI Pro - Realtime Database Active.</p>
     </footer>
 
     <!-- Custom JavaScript -->
