@@ -1,9 +1,26 @@
-/* Mencegah background scroll saat form lamaran terbuka */
+/* Style Tambahan Kustom */
+
+/* State Tampilan Modal */
 body.modal-open { 
     overflow: hidden; 
 }
 
-/* Memastikan modal benar-benar hilang saat ditutup */
 .hidden-modal { 
     display: none !important; 
+}
+
+/* Tab Navigation Styling Active / Inactive */
+.nav-tab-active {
+    background-color: #ebf5ff;
+    color: #1c64f2;
+    border-bottom: 2px solid #1c64f2;
+}
+
+.nav-tab-inactive {
+    color: #4b5563;
+}
+
+.nav-tab-inactive:hover {
+    color: #1c64f2;
+    background-color: #f9fafb;
 }
